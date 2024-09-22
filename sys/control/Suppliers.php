@@ -66,50 +66,12 @@ class Suppliers extends MY_Controller {
 			$row[] = $suppliers->supplier_code;
 			$row[] = $suppliers->supplier_name;
 			$row[] = $suppliers->mobile;
-			$row[] = $suppliers->email;
-			$row[] = (!empty($suppliers->purchase_due) && $suppliers->purchase_due!=0) ? app_number_format($suppliers->purchase_due) : (0);
-			
-			$row[] = ($suppliers->purchase_return_due==null) ? (0) : app_number_format($suppliers->purchase_return_due);
-
-			 		if($suppliers->status==1){ 
-			 			$str= "<span onclick='update_status(".$suppliers->id.",0)' id='span_".$suppliers->id."'  class='label label-success' style='cursor:pointer'>Active </span>";}
-					else{ 
-						$str = "<span onclick='update_status(".$suppliers->id.",1)' id='span_".$suppliers->id."'  class='label label-danger' style='cursor:pointer'> Inactive </span>";
-					}
-			$row[] = $str;			
+		
 					$str2 = '<div class="btn-group" title="View Account">
-										<a class="btn btn-primary btn-o dropdown-toggle" data-toggle="dropdown" href="#">
-											Action <span class="caret"></span>
-										</a>
-										<ul role="menu" class="dropdown-menu dropdown-light pull-right">';
-
-											if($this->permissions('suppliers_edit'))
-											$str2.='<li>
-												<a title="Edit Record ?" href="suppliers/update/'.$suppliers->id.'">
-													<i class="fa fa-fw fa-edit text-blue"></i>Edit
-												</a>
-											</li>';
-											if($this->permissions('purchase_payment_add'))
-						                      $str2.='<li>
-						                        <a title="Pay Opening Balance & Purchase Due Payments" class="pointer" onclick="pay_now('.$suppliers->id.')" >
-						                          <i class="fa fa-fw fa-money text-blue"></i>Pay Due Payments
-						                        </a>
-						                      </li>';
-						                      if($this->permissions('purchase_return_payment_add'))
-						                      $str2.='<li>
-						                        <a title="Pay Return Due" class="pointer" onclick="pay_return_due('.$suppliers->id.')" >
-						                          <i class="fa fa-fw fa-money text-blue"></i>Pay Return Due
-						                        </a>
-						                      </li>';
-											if($this->permissions('suppliers_edit'))
-											$str2.='<li>
-												<a style="cursor:pointer" title="Delete Record ?" onclick="delete_suppliers('.$suppliers->id.')">
-													<i class="fa fa-fw fa-trash text-red"></i>Delete
-												</a>
-											</li>
-											
-										</ul>
-									</div>';			
+								<a class="btn btn-danger btn-o " style="cursor:pointer" title="Delete Record ?" onclick="delete_suppliers('.$suppliers->id.')">
+									<i class="fa fa-fw fa-trash text-white"></i>ডিলিট
+								</a>
+							</div>';			
 
 			$row[] = $str2;
 			$data[] = $row;

@@ -91,7 +91,7 @@ $(document).ready(function(){
 
 });//ready
 
-
+/**
 function autoLoadFirstsupplier(supplier_id='') {
 
       var selectionBoxId = $(getsupplierSelectionId());
@@ -109,10 +109,6 @@ function autoLoadFirstsupplier(supplier_id='') {
             
             if(index == 0){
                
-                  /**
-                   * Pre-Selection of supplier
-                   * create the option and append to Select2
-                   * */
                    var option = new Option(supplier.text, supplier.id, true, true);
                    selectionBoxId.append(option).trigger('change');
 
@@ -131,3 +127,4 @@ function autoLoadFirstsupplier(supplier_id='') {
 
       });//then
 }
+*/

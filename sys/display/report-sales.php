@@ -60,7 +60,7 @@
                                     <span id="Sales_date_msg" style="display:none" class="text-danger"></span>
                                  </div>
                               </div>
-                              <div class="form-group">
+                              <div class="form-group" style="display: none; ">
                                  <label for="customer_id" class="col-sm-2 control-label"><?= $this->lang->line('customer_name'); ?></label>
                                  <div class="col-sm-3">
                                     <select class="form-control select2 " id="customer_id" name="customer_id">
@@ -123,9 +123,7 @@
                                     <th style=""><?= $this->lang->line('customer_id'); ?></th>
                                     <th style=""><?= $this->lang->line('customer_name'); ?></th>
                                     <th style=""><?= $this->lang->line('invoice_total'); ?>(<?= $CI->currency(); ?>)</th>
-                                    <th style=""><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
                                     <th style=""><?= $this->lang->line('due_amount'); ?>(<?= $CI->currency(); ?>)</th>
-                                    <th style=""><?= $this->lang->line('due_days'); ?></th>
                                  </tr>
                               </thead>
                               <tbody id="tbodyid">

@@ -665,11 +665,11 @@ class Purchase_model extends CI_Model {
 			          Supplier Information
 			          <address>
 			            <strong><?php echo  $supplier_name; ?></strong><br>
-			            <?php echo (!empty(trim($supplier_mobile))) ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
-			            <?php echo (!empty(trim($supplier_phone))) ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
-			            <?php echo (!empty(trim($supplier_email))) ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
-			            <?php echo (!empty(trim($supplier_gst_no))) ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
-			            <?php echo (!empty(trim($supplier_tax_number))) ? $this->lang->line('tax_number').": ".$supplier_tax_number."<br>" : '';?>
+			            <?php echo $supplier_mobile ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
+			            <?php echo $supplier_phone ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
+			            <?php echo $supplier_email ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
+			            <?php echo $supplier_gst_no ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
+			            <?php echo $supplier_tax_number ? $this->lang->line('tax_number').": ".$supplier_tax_number."<br>" : '';?>
 			          </address>
 			        </div>
 			        <!-- /.col -->
@@ -853,11 +853,11 @@ class Purchase_model extends CI_Model {
 			          Supplier Information
 			          <address>
 			            <strong><?php echo  $supplier_name; ?></strong><br>
-			            <?php echo (!empty(trim($supplier_mobile))) ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
-			            <?php echo (!empty(trim($supplier_phone))) ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
-			            <?php echo (!empty(trim($supplier_email))) ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
-			            <?php echo (!empty(trim($supplier_gst_no))) ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
-			            <?php echo (!empty(trim($supplier_tax_number))) ? $this->lang->line('tax_number').": ".$supplier_tax_number."<br>" : '';?>
+			            <?php echo $supplier_mobile ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
+			            <?php echo $supplier_phone ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
+			            <?php echo $supplier_email ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
+			            <?php echo $supplier_gst_no ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
+			            <?php echo $supplier_tax_number ? $this->lang->line('tax_number').": ".$supplier_tax_number."<br>" : '';?>
 			          </address>
 			        </div>
 			        <!-- /.col -->
@@ -910,7 +910,7 @@ class Purchase_model extends CI_Model {
 											echo "<td>".$res1->payment."</td>";
 											echo "<td>".$res1->payment_type."</td>";
 											echo "<td>".$res1->payment_note."</td>";
-											echo "<td>".ucfirst($res1->created_by)."</td>";
+											echo "<td>".$res1->created_by."</td>";
 										
 											echo "<td><a onclick='delete_purchase_payment(".$res1->id.")' class='pointer btn  btn-danger' ><i class='fa fa-trash'></i></</td>";	
 											echo "</tr>";

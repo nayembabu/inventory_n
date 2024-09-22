@@ -26,7 +26,6 @@ class Customers extends MY_Controller {
 	public function newcustomers(){
 		$this->form_validation->set_rules('customer_name', 'Customer Name', 'trim|required');
 		
-		
 		if ($this->form_validation->run() == TRUE) {
 			$result=$this->customers->verify_and_save();
 			echo $result;
@@ -34,6 +33,7 @@ class Customers extends MY_Controller {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
 	}
+	
 	public function update($id){
 		$this->permission_check('customers_edit');
 		$data=$this->data;
@@ -76,50 +76,12 @@ class Customers extends MY_Controller {
 			$row[] = $customers->customer_code;
 			$row[] = $customers->customer_name;
 			$row[] = $customers->mobile;
-			$row[] = $customers->email;
-			$row[] = app_number_format($this->show_total_customer_paid_amount($customers->id));
-			$row[] = (!empty($customers->sales_due) && $customers->sales_due!=0) ? app_number_format($customers->sales_due) : (0);
-			$row[] = ($customers->sales_return_due==null) ? (0) : app_number_format($customers->sales_return_due);
-			
-			 		if($customers->status==1){ 
-			 			$str= "<span onclick='update_status(".$customers->id.",0)' id='span_".$customers->id."'  class='label label-success' style='cursor:pointer'>Active </span>";}
-					else{ 
-						$str = "<span onclick='update_status(".$customers->id.",1)' id='span_".$customers->id."'  class='label label-danger' style='cursor:pointer'> Inactive </span>";
-					}
-			$row[] = $str;			
-					$str2 = '<div class="btn-group" title="View Account">
-										<a class="btn btn-primary btn-o dropdown-toggle" data-toggle="dropdown" href="#">
-											Action <span class="caret"></span>
-										</a>
-										<ul role="menu" class="dropdown-menu dropdown-light pull-right">';
 
-											if($this->permissions('customers_edit')&& $customers->id!=1)
-											$str2.='<li>
-												<a title="Edit Record ?" href="customers/update/'.$customers->id.'">
-													<i class="fa fa-fw fa-edit text-blue"></i>Edit
-												</a>
-											</li>';
-											if($this->permissions('sales_payment_add'))
-											$str2.='<li>
-												<a title="Pay Opening Balance & Sales Due Payments" class="pointer" onclick="pay_now('.$customers->id.')" >
-													<i class="fa fa-fw fa-money text-blue"></i>Receive Due Payments
-												</a>
-											</li>';
-											if($this->permissions('sales_return_payment_add'))
-											$str2.='<li>
-												<a title="Pay Return Due" class="pointer" onclick="pay_return_due('.$customers->id.')" >
-													<i class="fa fa-fw fa-money text-blue"></i>Pay Return Due
-												</a>
-											</li>';
-											if($this->permissions('customers_delete') && $customers->id!=1)
-											$str2.='<li>
-												<a style="cursor:pointer" title="Delete Record ?" onclick="delete_customers('.$customers->id.')">
-													<i class="fa fa-fw fa-trash text-red"></i>Delete
-												</a>
-											</li>
-											
-										</ul>
-									</div>';			
+					$str2 = '<div class="btn-group" title="View Account">
+								<a style="cursor:pointer" class="btn btn-danger btn-o" title="Delete Record ?" onclick="delete_customers('.$customers->id.')">
+									<i class="fa fa-fw fa-trash text-white"></i>ডিলিট
+								</a>
+							</div>';
 			$row[] =  $str2;
 
 			$data[] = $row;

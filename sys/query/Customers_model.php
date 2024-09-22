@@ -104,14 +104,12 @@ class Customers_model extends CI_Model {
 		$customer_code=$customer_init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
 		//end
 
-		$query1="insert into db_customers(customer_code,customer_name,mobile,phone,email,
-											country_id,state_id,city,postcode,address,opening_balance,
-											system_ip,system_name,
-											created_date,created_time,created_by,status,gstin,tax_number)
-											values('$customer_code','$customer_name','$mobile','$phone','$email',
-											'$country',$state,'$city','$postcode','$address','$opening_balance',
-											'$SYSTEM_IP','$SYSTEM_NAME',
-											'$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1,'$gstin','$tax_number')";
+		$query1="insert into db_customers(customer_code,customer_name,mobile,
+											address,system_ip,system_name,
+											created_date,created_time,created_by,status)
+											values('$customer_code','$customer_name','$mobile',
+											'$address','$SYSTEM_IP','$SYSTEM_NAME',
+											'$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1)";
 
 		if ($this->db->simple_query($query1)){
 				$this->session->set_flashdata('success', 'Success!! New Customer Added Successfully!');
@@ -273,11 +271,11 @@ class Customers_model extends CI_Model {
 			          <i><?= $this->lang->line('customer_details'); ?></i>
 			          <address>
 			            <strong><?php echo  $customer_name; ?></strong><br>
-			            <?php echo (!empty(trim($customer_mobile))) ? $this->lang->line('mobile').": ".$customer_mobile."<br>" : '';?>
-			            <?php echo (!empty(trim($customer_phone))) ? $this->lang->line('phone').": ".$customer_phone."<br>" : '';?>
-			            <?php echo (!empty(trim($customer_email))) ? $this->lang->line('email').": ".$customer_email."<br>" : '';?>
-			            <?php echo (!empty(trim($customer_gst_no))) ? $this->lang->line('gst_number').": ".$customer_gst_no."<br>" : '';?>
-			            <?php echo (!empty(trim($customer_tax_number))) ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
+			            <?php echo $customer_mobile ? $this->lang->line('mobile').": ".$customer_mobile."<br>" : '';?>
+			            <?php echo $customer_phone ? $this->lang->line('phone').": ".$customer_phone."<br>" : '';?>
+			            <?php echo $customer_email ? $this->lang->line('email').": ".$customer_email."<br>" : '';?>
+			            <?php echo $customer_gst_no ? $this->lang->line('gst_number').": ".$customer_gst_no."<br>" : '';?>
+			            <?php echo $customer_tax_number ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
 			            
 			          </address>
 			        </div>
@@ -475,7 +473,7 @@ class Customers_model extends CI_Model {
 	    				if($amount<=$sales_due && $sales_due>0){
 	    					$salespayments_entry = array(
 								'sales_id' 		=> $sales_id, 
-								'payment_date'		=> date("Y-m-d",strtotime($payment_date)),//Current Payment with sales entry
+								'payment_date'		=> date("Y-m-d",strtotime($payment_date)),
 								'payment_type' 		=> $payment_type,
 								'payment' 			=> $amount,
 								'payment_note' 		=> $payment_note,
@@ -591,11 +589,11 @@ class Customers_model extends CI_Model {
 			          <i><?= $this->lang->line('customer_details'); ?></i>
 			          <address>
 			            <strong><?php echo  $customer_name; ?></strong><br>
-			            <?php echo (!empty(trim($customer_mobile))) ? $this->lang->line('mobile').": ".$customer_mobile."<br>" : '';?>
-			            <?php echo (!empty(trim($customer_phone))) ? $this->lang->line('phone').": ".$customer_phone."<br>" : '';?>
-			            <?php echo (!empty(trim($customer_email))) ? $this->lang->line('email').": ".$customer_email."<br>" : '';?>
-			            <?php echo (!empty(trim($customer_gst_no))) ? $this->lang->line('gst_number').": ".$customer_gst_no."<br>" : '';?>
-			            <?php echo (!empty(trim($customer_tax_number))) ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
+			            <?php echo $customer_mobile ? $this->lang->line('mobile').": ".$customer_mobile."<br>" : '';?>
+			            <?php echo $customer_phone ? $this->lang->line('phone').": ".$customer_phone."<br>" : '';?>
+			            <?php echo $customer_email ? $this->lang->line('email').": ".$customer_email."<br>" : '';?>
+			            <?php echo $customer_gst_no ? $this->lang->line('gst_number').": ".$customer_gst_no."<br>" : '';?>
+			            <?php echo $customer_tax_number ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
 			            
 			          </address>
 			        </div>

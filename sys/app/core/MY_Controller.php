@@ -117,7 +117,7 @@ class MY_Controller extends CI_Controller{
              show_error("Access Denied", 403, $heading = "You Don't Have Enough Permission!!");
           }
           return true;
-        }
+        } 
         public function permission_check_with_msg($value=''){
           if(!$this->permissions($value)){
              echo "You Don't Have Enough Permission for this Operation!";

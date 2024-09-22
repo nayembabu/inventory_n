@@ -8,6 +8,7 @@ class Pos extends MY_Controller {
 		parent::__construct();
 		$this->load_global();
 		$this->load->model('pos_model','pos_model');
+		$this->load->model('buy_model','buy');
 		$this->load->helper('sms_template_helper');
 
 	}
@@ -29,24 +30,36 @@ class Pos extends MY_Controller {
 	//adding new item from Modal
 	public function newcustomer(){
 	
-		$this->form_validation->set_rules('customer_name', 'Customer Name', 'trim|required');
-		
-		if ($this->form_validation->run() == TRUE) {
-			$this->load->model('customers_model');
-			$result=$this->customers_model->verify_and_save();
-			//fetch latest item details
-			$res=array();
-			$query=$this->db->query("select id,customer_name from db_customers order by id desc limit 1");
-			$res['id']=$query->row()->id;
-			$res['customer_name']=$query->row()->customer_name;
-			$res['result']=$result;
-			
-			echo json_encode($res);
 
-		} 
-		else {
-			echo "Please Fill Compulsory(* marked) Fields.";
-		}
+		$last_id = $this->buy->save_new_customer(
+			array(
+				"customer_name" => $this->input->post('name'),
+				"mobile" => $this->input->post('mobile'),
+				"sales_due" => $this->input->post('due'),
+				"opening_balance" => $this->input->post('due'),
+				"address" => $this->input->post('address'),
+				"system_ip" => $_SERVER['REMOTE_ADDR'],
+				"system_name" => gethostbyaddr($_SERVER['REMOTE_ADDR']),
+				"created_date" => date('Y-m-d'),
+				"created_time" => time(),
+				"customer_code" => time(),
+				"status" => 1
+			)
+		);
+		$res = $this->buy->get_customer_by_id($last_id);
+
+
+		// $this->load->model('customers_model');
+		// $result=$this->customers_model->verify_and_save();
+		// //fetch latest item details
+		// $res=array();
+		// $query=$this->db->query("select id,customer_name from db_customers order by id desc limit 1");
+		// $res['id']=$query->row()->id;
+		// $res['customer_name']=$query->row()->customer_name;
+		// $res['result']=$result;
+		// echo json_encode($res);
+		$this->output->set_content_type('application/json')->set_output(json_encode($res));
+		
 	}
 
 	public function get_details(){

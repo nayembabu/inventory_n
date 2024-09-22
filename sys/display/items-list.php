@@ -10,6 +10,11 @@
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
+  
+    <!-- **********************MODALS***************** -->
+    <?php include"modals/modal_item_edit.php"; ?>
+    <!-- **********************MODALS END***************** -->
+
 <div class="wrapper">
 
   <!-- Left side column. contains the logo and sidebar -->
@@ -41,85 +46,25 @@
         <!-- ********** ALERT MESSAGE END******* -->
         <div class="col-xs-12">
           <div class="box">
-            <div class="box-header with-border">
-              <div class="row">
-                    <div class="col-md-12">
-                    <div class="col-md-3">
-                        <label for="brand_id" class=" control-label"><?= $this->lang->line('brand'); ?></label>
-                          <select class="form-control select2" id="brand_id" name="brand_id"  style="width: 100%;">
-                            <?php
-                               $query1="select * from db_brands where status=1";
-                               $q1=$this->db->query($query1);
-                               if($q1->num_rows($q1)>0)
-                                {  echo '<option value="">-Select-</option>'; 
-                                    foreach($q1->result() as $res1)
-                                  { 
-                                    echo "<option value='".$res1->id."'>".$res1->brand_name."</option>";
-                                  }
-                                }
-                                else
-                                {
-                                   ?>
-                            <option value="">No Records Found</option>
-                            <?php
-                               }
-                               ?>
-                         </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="category_id" class=" control-label"><?= $this->lang->line('category'); ?></label>
-                          <select class="form-control select2" id="category_id" name="category_id"  style="width: 100%;">
-                            <?php
-                               $query1="select * from db_category where status=1";
-                               $q1=$this->db->query($query1);
-                               if($q1->num_rows($q1)>0)
-                                {  echo '<option value="">-Select-</option>'; 
-                                    foreach($q1->result() as $res1)
-                                  { 
-                                    echo "<option value='".$res1->id."'>".$res1->category_name."</option>";
-                                  }
-                                }
-                                else
-                                {
-                                   ?>
-                            <option value="">No Records Found</option>
-                            <?php
-                               }
-                               ?>
-                         </select>
-                    </div>
-                    
-                  </div>
-                </div>
+            <div class="box-header with-border ">
 
-              <?php if($CI->permissions('items_add')) { ?>
               <div class="box-tools">
                 <a class="btn btn-block btn-info " href="<?php echo $base_url; ?>items/add">
-                <i class="fa fa-plus " ></i> <?= $this->lang->line('new_item'); ?></a>
+                <i class="fa fa-plus " ></i>  নতুন পন্য যোগ </a>
               </div>
-             <?php } ?>
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
+            <div class="box-body" style="margin-top: 30px;" >
               <table id="example2" class="table table-bordered table-striped" width="100%">
                 <thead class="bg-primary ">
                 <tr>
                   <th class="text-center">
                     <input type="checkbox" class="group_check checkbox" >
                   </th>
-                  <th><?= $this->lang->line('image'); ?></th>
                   <th><?= $this->lang->line('item_code'); ?></th>
                   <th><?= $this->lang->line('item_name'); ?></th>
-                  <th><?= $this->lang->line('brand'); ?></th>
-                  <th><?= $this->lang->line('category'); ?></th>
                   <th><?= $this->lang->line('unit'); ?></th>
-                  <th><?= $this->lang->line('stock_qty'); ?></th>
-                  <th><?= $this->lang->line('minimum_qty'); ?></th>
-                  <th><?= $this->lang->line('purchase_price'); ?></th>
-                  <th><?= $this->lang->line('final_sales_price'); ?></th>
-                  <th><?= $this->lang->line('tax'); ?></th>
-	         	  	  <th><?= $this->lang->line('status'); ?></th>
-                  <th><?= $this->lang->line('action'); ?></th>
+                  <th>অপশন</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -176,13 +121,6 @@ function load_datatable(){
                     multi_delete();
                 }
             },
-            { extend: 'copy', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
-            { extend: 'excel', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
-            { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
-            { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
-            { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
-            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },  
-
             ]
         },
         /* FOR EXPORT BUTTONS END */
@@ -196,7 +134,7 @@ function load_datatable(){
         },
         // Load data for the table's content from an Ajax source
         "ajax": {
-            "url": "<?php echo site_url('items/ajax_list')?>",
+            "url": "items/ajax_list",
             "type": "POST",
             "data":{
               brand_id : $("#brand_id").val(),
@@ -219,7 +157,7 @@ function load_datatable(){
         //Set column definition initialisation properties.
         "columnDefs": [
         { 
-            "targets": [ 0,1,12,13 ], //first column / numbering column
+            "targets": [ 0,3 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
         {
@@ -239,6 +177,45 @@ $(document).ready(function() {
 $("#brand_id,#category_id").on("change",function(){
     $('#example2').DataTable().destroy();
     load_datatable();
+});
+
+
+
+$(document).on('click', '.edit_item_this', function () {
+  let this_item_id = $(this).attr('item_ids');
+  $.ajax({
+    type: "post",
+    url: "items/get_item_by_id_ajax",
+    data: {
+      id: this_item_id
+    },
+    success: function (rs) {
+      $('.item_name_assgn').val(rs.items.item_name);
+      $('.edit_item_by_id').attr('item_id_this', rs.items.unit_id);
+      $('.select_assgn').html(rs.unit_code);
+    }
+  });
+});
+
+
+// 
+// 
+// edit_item_by_id item_id_this
+// edit_item_by_id
+
+$(document).on('click', '.edit_item_by_id', function () {
+  $.ajax({
+    type: "post",
+    url: "items/update_item_by_id",
+    data: {
+      item_name: $('.item_name_assgn').val(),
+      unit_id: $('.unit_id_select').val(),
+      id: $('.edit_item_by_id').attr('item_id_this')
+    },
+    success: function (response) {
+      
+    }
+  });
 });
 
 </script>

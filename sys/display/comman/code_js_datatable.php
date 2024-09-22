@@ -125,7 +125,7 @@ function call_code(){
 <script type="text/javascript">
 $(document).ready(function () { setTimeout(function() {$( ".alert-dismissable" ).fadeOut( 1000, function() {});}, 10000); });
 </script>
-<script type="text/javascript">
+<script type="text/javascript"> 
   function round_off(input=0){
     <?php if(is_enabled_round_off()){ ?>
       return Math.round(input);

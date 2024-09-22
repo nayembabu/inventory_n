@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Expense_model extends CI_Model {
 
-	//Datatable start
+	//Datatable start  
 	var $table = 'db_expense as a';
 	var $column_order = array('a.id','a.expense_date','b.category_name','a.reference_no','a.expense_for','a.expense_amt','a.note','a.created_by'); //set column field database for datatable orderable
 	var $column_search = array('a.id','a.expense_date','b.category_name','a.reference_no','a.expense_for','a.expense_amt','a.note','a.created_by'); //set column field database for datatable searchable 
@@ -89,13 +89,13 @@ class Expense_model extends CI_Model {
 
 		//Create expenses unique Number
 		$qs4="select coalesce(max(id),0)+1 as maxid from db_expense";
-		$q1=$this->db->query($qs4);
+		$q1=$this->db->query($qs4); 
 		$maxid=$q1->row()->maxid;
 		$expense_code=$expense_init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
 		//end
 
-		$query1="insert into db_expense(expense_code,category_id,expense_for,expense_amt,reference_no,note,created_date,created_time,created_by,status,system_ip,system_name,expense_date)
-						values('$expense_code','$category_id','$expense_for','$expense_amt','$reference_no','$note','$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1,'$SYSTEM_IP','$SYSTEM_NAME','".date("Y-m-d",strtotime($expense_date))."')";
+		$query1="insert into db_expense(expense_code,expense_for,o_p,expense_amt,created_date,created_time,created_by,status,system_ip,system_name,expense_date)
+						values('$expense_code','$expense_for',2,'$expense_amt','$CUR_DATE','".time()."','$CUR_USERNAME',1,'$SYSTEM_IP','$SYSTEM_NAME','".date("Y-m-d",strtotime($expense_date))."')";
 
 		if ($this->db->simple_query($query1)){
 			    $this->session->set_flashdata('success', 'Success!! Record Added Successfully!');

@@ -1,16 +1,34 @@
-/*Email validation code*/
-function validateEmail(sEmail) {
-    var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-    if (filter.test(sEmail)) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-/*Email validation code end*/
+
 /* customers modal start*/
-$(".add_customer").on("click",function(e){
+$(document).on("click", ".add_customer", function(){
+	var base_url=$("#base_url").val().trim();
+  $.ajax({
+    type: 'POST',
+    url: base_url+'pos/newcustomer',
+    data: {
+      name:     $(".cus_name").val(),
+      mobile:   $(".cus_mobile_no").val(),
+      due:      $(".cus_previous_due").val(),
+      address:  $(".cus_addrs").val(),
+    },
+    success: function(data){
+      
+      $('#customer-modal').modal('toggle');
+      var newOption = '<option value='+data.id+' selected>'+data.customer_name+'</option>';
+      $('#customer_id').append(newOption).trigger('change');
+      //$("#amount").val(data.advance);
+      $('#customer-form')[0].reset();
+      toastr["success"]("New Customer Added!!");
+      success.currentTime = 0;
+      success.play();
+    }
+  })
+});
+
+
+
+/*
+$(".add_customer").on("click", function(e){
 	var base_url=$("#base_url").val().trim();
     //Initially flag set true
     var flag=true;
@@ -55,7 +73,7 @@ $(".add_customer").on("click",function(e){
 			if(confirm("Are you Sure ?")){
 				e.preventDefault();
 				data = new FormData($('#customer-form')[0]);//form name
-				/*Check XSS Code*/
+        
 				if(!xss_validation(data)){ return false; }
 				
 				$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
@@ -103,11 +121,12 @@ $(".add_customer").on("click",function(e){
 
 		//e.preventDefault
 });
+ */
 /* customers modal end */
 
 /* Suppliers modals start*/
-$(".add_supplier").on("click",function(e){
-	var base_url=$("#base_url").val().trim();
+/** $(".add_supplier").on("click",function(e){
+	var base_url=$("#base_url").val().trim(); 
     //Initially flag set true
     var flag=true;
     function check_field(id){
@@ -152,11 +171,11 @@ $(".add_supplier").on("click",function(e){
 				
 				e.preventDefault();
 				data = new FormData($('#supplier-form')[0]);//form name
-				/*Check XSS Code*/
+				// Check XSS Code
 				if(!xss_validation(data)){ return false; }
 				
 				$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
-				$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
+				// $("#"+this_id).attr('disabled',true);  //Enable Save or Update button
 				$.ajax({
 				type: 'POST',
 				url: base_url+'purchase/newsupplier',
@@ -199,7 +218,7 @@ $(".add_supplier").on("click",function(e){
 		
 
 		//e.preventDefault
-});
+});*/
 /* Suppliers modal end*/
 
 

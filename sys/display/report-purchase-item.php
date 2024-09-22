@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <base href="<?php echo base_url(); ?>" target="">
 <!-- TABLES CSS CODE -->
 <?php include"comman/code_css_form.php"; ?>
 <!-- </copy> -->  
+ <style>
+  .text_centers {
+    text-align: center
+  }
+  .text_rights {
+    text-align: right;
+  }
+ </style>
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -42,8 +52,8 @@
               <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
               <input type="hidden" id="base_url" value="<?=base_url()?>">
               <div class="box-body">
-        <div class="form-group">
-        <label for="from_date" class="col-sm-2 control-label"><?= $this->lang->line('from_date'); ?></label>
+              <div class="form-group">
+              <label for="from_date" class="col-sm-2 control-label"><?= $this->lang->line('from_date'); ?></label>
                  
           <div class="col-sm-3">
             <div class="input-group date">
@@ -68,13 +78,12 @@
           </div>
         
                 </div> 
-                <div class="form-group">
-          <label for="item_id" class="col-sm-2 control-label"><?= $this->lang->line('item_name'); ?></label>
-
-                  <div class="col-sm-3">
-          <select class="form-control select2 " id="item_id" name="item_id">
-                  </select>
-          <span id="item_id_msg" style="display:none" class="text-danger"></span>
+                  <div class="form-group">
+                    <label for="item_id" class="col-sm-2 control-label"><?= $this->lang->line('item_name'); ?></label>
+                    <div class="col-sm-3">
+                    <select class="form-control select2 " id="item_id" name="item_id">
+                    </select>
+                    <span id="item_id_msg" style="display:none" class="text-danger"></span>
                   </div>
           
                 </div>
@@ -84,12 +93,7 @@
               <div class="box-footer">
                 <div class="col-sm-8 col-sm-offset-2 text-center">
                    <div class="col-md-3 col-md-offset-3">
-                      <button type="button" id="view" class=" btn btn-block btn-success" title="Save Data">Show</button>
-                   </div>
-                   <div class="col-sm-3">
-                    <a href="<?=base_url('dashboard');?>">
-                      <button type="button" class="col-sm-3 btn btn-block btn-warning close_btn" title="Go Dashboard">Close</button>
-                    </a>
+                      <button type="button" id="view" class=" btn btn-block btn-success btn-lg " title="Save Data">Show</button>
                    </div>
                 </div>
              </div>
@@ -113,30 +117,14 @@
          
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title"><?= $this->lang->line('records_table'); ?></h3>
-              <?php $this->load->view('components/export_btn',array('tableId' => 'report-data'));?>
+              <h3 class="box-title">
+                ক্রয়কৃত পন্যের লিস্ট সিলেক্ট করুন  
+              </h3>
             </div>
             <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-              
-              <table class="table table-bordered table-hover " id="report-data" >
-                <thead>
-                <tr class="bg-blue">
-                  <th style="">#</th>
-                  <th style=""><?= $this->lang->line('invoice_no'); ?></th>
-                  <th style=""><?= $this->lang->line('purchase_date'); ?></th>
-                  <th style=""><?= $this->lang->line('supplier_name'); ?></th>
-                  <th style=""><?= $this->lang->line('item_name'); ?></th>
-                  <th style=""><?= $this->lang->line('quantity'); ?></th>
-                  <th style=""><?= $this->lang->line('amount'); ?>(<?= $CI->currency(); ?>)</th>
-                </tr>
-                </thead>
-                <tbody id="tbodyid">
-                
-              </tbody>
-              </table>
-              
-              
+            <div class="box-body table-responsive no-padding " >
+              <div class="nav-tabs-custom ref_assign_nav_data" ></div>
+              <div class="purchase_history_with_sells " ></div>
             </div>
             <!-- /.box-body -->
           </div>
@@ -176,7 +164,6 @@
 <script>
   $("#view,#view_all").on("click",function(){
     var base_url = $("#base_url").val();
-    
 
     var from_date=document.getElementById("from_date").value.trim();
     var to_date=document.getElementById("to_date").value.trim();
@@ -187,31 +174,166 @@
             document.getElementById("from_date").focus();
             return;
         }
-     
+
      if(to_date == "")
         {
             toastr["warning"]("Select To Date!");
             document.getElementById("to_date").focus();
             return;
         }
-    
+
+     if(item_id == "")
+        {
+            toastr["warning"]("Select Item!");
+            document.getElementById("item_id").focus();
+            return;
+        }
+
+
+
+
         if(this.id=="view_all"){
           var view_all='yes';
         }
         else{
           var view_all='no';
         }
-           
+
         $(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
-        $.post(base_url+"reports/show_item_purchase_report",{item_id:item_id,view_all:view_all,from_date:from_date,to_date:to_date},function(result){
+
+        /*
+          $.post(base_url+"reports/show_item_purchase_report",{item_id:item_id,view_all:view_all,from_date:from_date,to_date:to_date},function(result){
           //alert(result);
             setTimeout(function() {
              $("#tbodyid").empty().append(result);     
              $(".overlay").remove();
             }, 0);
-           }); 
-     
-  
+          }); 
+        */
+
+        $.ajax({
+          type: "post",
+          url: "reports/show_purchase_items_reports",
+          data: {
+            sdate: from_date,
+            edate: to_date,
+            itemid: item_id
+          },
+          success: function (res) { 
+            $(".overlay").remove();
+            let ref_data_s = '';
+            for (let n = 0; n < res.length; n++) {
+              ref_data_s += `<li>
+                              <a class="clickable_item_id" href="#tab_1" data-toggle="tab" purchases_ids="${res[n].purchase_id}" purchases_item_ids="${res[n].id}">
+                                ${res[n].supplier_name} - ${res[n].ref_lot_no} 
+                              </a>
+                            </li>`;
+            } 
+
+            $('.ref_assign_nav_data').html(
+              `<ul class="nav nav-tabs bg-gray text-bold font-italic">${ref_data_s}</ul>`
+            );
+
+          }
+        });
+});
+
+
+$(document).on('click', '.clickable_item_id', function () {  
+  $('.purchase_history_with_sells').html('');
+  let purchase_item_id = $(this).attr('purchases_item_ids');   
+  let purchase_id = $(this).attr('purchases_ids');   
+  $.ajax({
+    type: "post",
+    url: "reports/get_buy_sell_history",
+    data: {
+      p_i_id: purchase_item_id,
+      p_id: purchase_id
+    },
+    success: function (res) {
+      let typesss = '';
+      let total_costs = parseFloat(res.purchase_cost_history.transport_cost) + parseFloat(res.purchase_cost_history.arot_cost) + parseFloat(res.purchase_cost_history.tohuri_cost) + parseFloat(res.purchase_cost_history.ghar_kuli_cost) + parseFloat(res.purchase_cost_history.other_total_cost);
+      if (res.purchase_item.buying_type_status == 1) {
+        typesss = `ডাইরেক্ট ক্রয়`;
+      }else if (res.purchase_item.buying_type_status == 2) {
+        typesss = `কমিশনে ক্রয়`;
+      }
+      let purchase_payment_s = '';
+      for (let n = 0; n < res.purchase_paymentss.length; n++) {
+        purchase_payment_s += `<tr>
+                                <td>${res.purchase_paymentss[n].payment_date}</td>
+                                <td class="text_rights  " >${res.purchase_paymentss[n].payment}</td>
+                              </tr>`
+      }
+      let sel_history_data = '';
+      for (let l = 0; l < res.sell_historyss.length; l++) {
+        sel_history_data += `<tr>
+                              <th style="font-size: 16px;" >${res.sell_historyss[l].customer_name}</th>
+                              <th style="font-size: 16px;" class="text_rights  " > ${parseInt(res.sell_historyss[l].sell_ing_qnty_total)} ${res.purchase_item.unit_name} (${parseInt(res.sell_historyss[l].total_sell_price_s)} টাকা) </th>
+                            </tr>
+                            <tr>
+                              <td style="text-align: right; " >বকেয়া </td>
+                              <td class="text_rights  " >${parseInt(res.sell_historyss[l].sell_payment_due)} টাকা</td>
+                            </tr>`;
+      }
+      $('.purchase_history_with_sells').html(
+        `<div class="col-md-6 ">
+            <table class="table" >
+              <tr>
+                <th colspan="2" class="text_centers " style="font-size: 20px;" ><span>${res.purchase_item.supplier_name}</span> (${typesss}) </th>
+              </tr>
+              <tr>
+                <td>মোট পরিমাণ</td>
+                <td class="text_rights " >${res.purchase_item.purchase_total_bosta} ${res.purchase_item.unit_name}</td>
+              </tr>
+              <tr>
+                <td colspan="2" class="text_centers " > খরচের হিসাব </td>
+              </tr>
+              <tr>
+                <td>পরিবহন খরচ</td>
+                <td class="text_rights  " style="padding-right: 20px; " >${res.purchase_cost_history.transport_cost}</td>
+              </tr>
+              <tr>
+                <td>আড়ৎ খরচ</td>
+                <td class="text_rights  " style="padding-right: 20px; " >${res.purchase_cost_history.arot_cost}</td>
+              </tr>
+              <tr>
+                <td>তহুরী খরচ</td>
+                <td class="text_rights  " style="padding-right: 20px; " >${res.purchase_cost_history.tohuri_cost}</td>
+              </tr>
+              <tr>
+                <td>ঘর কুলী খরচ</td>
+                <td class="text_rights  " style="padding-right: 20px; " >${res.purchase_cost_history.ghar_kuli_cost}</td>
+              </tr>
+              <tr>
+                <td>অন্যান্য খরচ</td>
+                <td class="text_rights  " style="padding-right: 20px; " >${res.purchase_cost_history.other_total_cost}</td>
+              </tr>
+              <tr>
+                <td>মোট খরচ</td>
+                <th class="text_rights  " style="padding-right: 20px; " >${total_costs}</th>
+              </tr>
+              <tr>
+                <td>মোট দাম</td>
+                <th class="text_rights  "  style="font-size: 16px; " >${res.purchase_item.pur_total_price}</th>
+              </tr>
+              ${purchase_payment_s}
+              <tr>
+                <td>বকেয়া দেনা টাকা</td>
+                <td class="text_rights  " >${res.purchase_item.total_due_payments}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-md-6 ">
+            <div></div>
+            <table class="table">
+              ${sel_history_data}
+            </table>
+          </div>`
+      );      
+    }
+  });
+
 });
 
 
@@ -219,7 +341,7 @@
 
 <!-- Make sidebar menu hughlighter/selector -->
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
-    
-    
+
+
 </body>
 </html>

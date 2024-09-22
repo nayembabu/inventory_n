@@ -49,22 +49,42 @@
       increaseArea: '10%' // optional
     });
   });
-</script>
-<!-- CSRF Token Protection -->
-<script type="text/javascript" >
-$(function($) { // this script needs to be loaded on every page where an ajax POST may happen
-    $.ajaxSetup({ data: {'<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }  }); });
-</script>
-<!-- Initialize Select2 Elements -->
-<script type="text/javascript"> $(".select2").select2(); </script>
-<!-- Initialize date with its Format -->
-<script type="text/javascript">
-  //Date picker
-    $('.datepicker').datepicker({
-      autoclose: true,
-    format: '<?php echo $VIEW_DATE;?>',
-     todayHighlight: true
+  
+
+    $(function($) { // this script needs to be loaded on every page where an ajax POST may happen
+      $.ajaxSetup({ 
+        data: {
+          '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' 
+        }  
+      }); 
     });
+    
+    
+    
+  //Select-2
+    $(".select2").select2(); 
+    
+  //Date picker
+    $( function() {
+      $( ".datepicker" ).datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: true,
+        autoclose: true
+      });
+    });
+
+    /*
+  $(document).on('click', '.datepicker', function () {
+    
+    $(this).datepicker({
+      autoclose: true,
+      format: '<?php echo $VIEW_DATE;?>',
+      todayHighlight: true
+    });    
+  });
+  */
+
+
 </script>
 <!-- DATE RANGE PICKER -->
 <script>

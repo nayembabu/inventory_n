@@ -24,22 +24,6 @@ $('#save,#update').on("click",function (e) {
    
     //Validate Input box or selection box should not be blank or empty
 	check_field("item_name");
-	check_field("category_id");
-	check_field("unit_id");//units of measurments
-	check_field("price");
-	check_field("alert_qty");
-
-	check_field("tax_id");
-	check_field("purchase_price");
-	check_field("tax_type");
-	//check_field("profit_margin");
-	check_field("sales_price");
-	
-	if(!$.isNumeric($("#alert_qty").val())){
-   	toastr["error"]("Miminum Quantity must be a number");
-   	$("#alert_qty").focus();
-   	return false;
-   }
 
     if(flag==false)
     {
@@ -51,50 +35,30 @@ $('#save,#update').on("click",function (e) {
 
     if(this_id=="save")  //Save start
     {
-
-					if(confirm("Do You Wants to Save Record ?")){
-						e.preventDefault();
-						data = new FormData($('#items-form')[0]);//form name
-						/*Check XSS Code*/
-						if(!xss_validation(data)){ return false; }
-						
-						$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
-						$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
-						$.ajax({
-						type: 'POST',
-						url: 'newitems',
-						data: data,
-						cache: false,
-						contentType: false,
-						processData: false,
-						success: function(result){
-              //alert(result);return;
-							if(result=="success")
-							{
-								//alert("Record Saved Successfully!");
-								window.location=base_url+'items';//"items-view.php";
-								return;
-							}
-							else if(result=="failed")
-							{
-							   toastr["error"]("Sorry! Failed to save Record.Try again!");
-							   //	return;
-							}
-							else
-							{
-								toastr["error"](result);
-								
-							}
-							$("#"+this_id).attr('disabled',false);  //Enable Save or Update button
-							$(".overlay").remove();
-
-					   }
-					   });
+		if(confirm("Do You Wants to Save Record ?")){
+			e.preventDefault();
+			data = new FormData($('#items-form')[0]);//form name
+			/*Check XSS Code*/
+			if(!xss_validation(data)){ return false; }
+			
+			$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+			$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
+			$.ajax({
+				type: 'POST',
+				url: 'items/newitems',
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function(result){
+					window.location='items/add';
+					return;
+					$("#"+this_id).attr('disabled',false);  //Enable Save or Update button
+					$(".overlay").remove();
 				}
-				return;
-				//e.preventDefault
-
-
+			});
+		}
+		return;
     }//Save end
 	
 	else if(this_id=="update")  //Save start

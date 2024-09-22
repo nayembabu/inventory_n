@@ -12,7 +12,7 @@
   <?php include"sidebar.php"; ?>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper"> 
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
@@ -165,12 +165,11 @@
               }
             ?>
             <br>
-            <?php echo (!empty(trim($supplier_mobile))) ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
-            <?php echo (!empty(trim($supplier_phone))) ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
-            <?php echo (!empty(trim($supplier_email))) ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
-            <?php echo (!empty(trim($supplier_gst_no))) ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
-            <?php echo (!empty(trim($supplier_tax_number))) ? $this->lang->line('tax_number').": ".$supplier_tax_number."<br>" : '';?>
-
+            <?php echo $supplier_mobile ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
+            <?php echo $supplier_phone ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
+            <?php echo $supplier_email ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
+            <?php echo $supplier_gst_no ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
+            <?php echo $supplier_tax_number ? $this->lang->line('tax_number').": ". $supplier_tax_number."<br>" : '';?>
           </address>
         </div>
         <!-- /.col -->
@@ -344,7 +343,8 @@
                                   echo "</tr>";
                                   $total_paid +=$res3->payment;
                                 }
-                                echo "<tr class='text-right text-bold'><td colspan='4' >Total</td><td>".$CI->currency(number_format($total_paid,2,'.',''))."</td></tr>";
+                                echo "<tr class='text-right text-bold'><td colspan='4' >মোট পরিশোধ</td><td style='border-top: 3px solid black;' >".$CI->currency(number_format($total_paid,2,'.',''))."</td></tr>";     
+                                echo "<tr class='text-right text-bold'><td colspan='4' >বকেয়া</td><td>".$CI->currency(number_format($grand_total-$total_paid,2,'.',''))."</td></tr>"; 
                               }
                               else{
                                 echo "<tr><td colspan='5' class='text-center text-bold'>No Previous Payments Found!!</td></tr>";
@@ -449,7 +449,6 @@
   <!-- /.content-wrapper -->
   <?php include"footer.php"; ?>
 
- 
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>

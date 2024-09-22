@@ -60,25 +60,12 @@
                   <th><?= $this->lang->line('supplier_id'); ?></th>
                   <th><?= $this->lang->line('supplier_name'); ?></th>
                   <th><?= $this->lang->line('mobile'); ?></th>
-                  <th><?= $this->lang->line('email'); ?></th>
-                  <th><?= $this->lang->line('purchase_due'); ?></th>
-                  <th><?= $this->lang->line('purchase_return_due'); ?></th>
-                  <th><?= $this->lang->line('status'); ?></th>
-                  <th><?= $this->lang->line('action'); ?></th>
+                  <th>অপশন</th>
                 </tr>
                 </thead>
                 <tbody>
 				
                 </tbody>
-               <tfoot>
-                  <tr class="bg-gray">
-                      <th colspan="5" style="text-align:right">Total</th>
-                      <th></th>
-                      <th></th>
-                      <th></th><!-- 7 -->
-                      <th></th><!-- 8 -->
-                  </tr>
-              </tfoot>
               </table>
             </div>
             <!-- /.box-body -->
@@ -131,11 +118,11 @@ $(document).ready(function() {
                     multi_delete();
                 }
             },
-            { extend: 'copy', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7]} },
-            { extend: 'excel', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7]} },
-            { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7]} },
-            { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7]} },
-            { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7]} },
+            { extend: 'copy', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3]} },
+            { extend: 'excel', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3]} },
+            { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3]} },
+            { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3]} },
+            { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3]} },
             { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },  
 
             ]
@@ -170,7 +157,7 @@ $(document).ready(function() {
         //Set column definition initialisation properties.
         "columnDefs": [
         { 
-            "targets": [ 0,8 ], //first column / numbering column
+            "targets": [ 0,3 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
         {
@@ -189,22 +176,6 @@ $(document).ready(function() {
                     typeof i === 'number' ?
                         i : 0;
             };
-          
-            var purchase_due = api
-                .column( 5, { page: 'none'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-            var purchase_return_due = api
-                .column( 6, { page: 'none'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-            //$( api.column( 0 ).footer() ).html('Total');
-            $( api.column( 5 ).footer() ).html(app_number_format(purchase_due));
-            $( api.column( 6 ).footer() ).html(app_number_format(purchase_return_due));
         },
         /*End Footer Total*/
     });

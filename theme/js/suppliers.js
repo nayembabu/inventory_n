@@ -48,15 +48,6 @@ $('#save,#update').on("click",function (e) {
 	//check_field("mobile");
 	//check_field("state");
 
-    var email=$("#email").val().trim();
-    if (email!='' && !validateEmail(email)) {
-            $("#email_msg").html("Invalid Email!").show();
-             flag=false;
-        }
-        else{
-        	$("#email_msg").html("Invalid Email!").hide();
-        }
-
 	if(flag==false)
     {
 		toastr["warning"]("You have Missed Something to Fillup!")
@@ -78,32 +69,18 @@ $('#save,#update').on("click",function (e) {
 						$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
 						$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
 						$.ajax({
-						type: 'POST',
-						url: 'newsuppliers',
-						data: data,
-						cache: false,
-						contentType: false,
-						processData: false,
-						success: function(result){
-              //alert(result);return;
-							if(result=="success")
-							{
-								//alert("Record Saved Successfully!");
-								window.location=base_url+"suppliers";
-							}
-							else if(result=="failed")
-							{
-							   toastr['error']("Sorry! Failed to save Record.Try again");
-							   //	return;
-							}
-							else
-							{
-								toastr['error'](result);
-							}
-							$("#"+this_id).attr('disabled',false);  //Enable Save or Update button
-							$(".overlay").remove();
-					   }
-					   });
+              type: 'POST',
+              url: 'suppliers/newsuppliers',
+              data: data,
+              cache: false,
+              contentType: false,
+              processData: false,
+              success: function(result){ 
+                window.location="suppliers/add";
+                $("#"+this_id).attr('disabled',false);  //Enable Save or Update button
+                $(".overlay").remove();
+              }
+					  });
 				}
 
 				//e.preventDefault

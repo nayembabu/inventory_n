@@ -1,4 +1,7 @@
 <?php
+
+use FontLib\Table\Type\post;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reports extends MY_Controller {
@@ -6,9 +9,20 @@ class Reports extends MY_Controller {
 		parent::__construct();
 		$this->load_global();
 		$this->load->model('reports_model','reports');
+		$this->load->model('buy_model','buy');
 	}
-	
-		
+
+	public function get_income_expense_dat_to_date()
+	{
+		$startDate 	= date('Y-m-d', strtotime($this->input->post('startDate')));
+		$endDate 	= date('Y-m-d', strtotime($this->input->post('endDate')));
+		$dt['getpay']	= $this->buy->get_payment_from_customer($startDate, $endDate);
+		$dt['income']	= $this->buy->get_ohers_income($startDate, $endDate);
+		$dt['expense']	= $this->buy->expense_other_perpose($startDate, $endDate);
+		$dt['costpay']	= $this->buy->cost_pay_to_supplier($startDate, $endDate);
+		$this->output->set_content_type('application/json')->set_output(json_encode($dt));
+	}
+
 	//Sales Report 
 	public function sales(){
 		$this->permission_check('sales_report');
@@ -39,7 +53,7 @@ class Reports extends MY_Controller {
 		$this->load->view('report-purchase', $data);
 	}
 	public function show_purchase_report(){
-		echo $this->reports->show_purchase_report();
+		echo $this->reports->show_purchase_report(); 
 	}
 
 	//Purchase Return report
@@ -67,7 +81,7 @@ class Reports extends MY_Controller {
 	public function profit_loss(){
 		$this->permission_check('profit_report');
 		$data=$this->data;
-		$data['page_title']=$this->lang->line('profit_and_loss_report');
+		$data['page_title']= 'আয়-ব্যায় রিপোর্ট';
 		$this->load->view('report-profit-loss', $data);
 	}
 	public function get_profit_loss_report(){
@@ -84,6 +98,7 @@ class Reports extends MY_Controller {
 	public function stock(){
 		$this->permission_check('stock_report');
 		$data=$this->data;
+		$data['items']=$this->buy->get_all_products();		
 		$data['page_title']=$this->lang->line('stock_report');
 		$this->load->view('report-stock', $data);
 	}
@@ -123,6 +138,26 @@ class Reports extends MY_Controller {
 		$data['page_title']=$this->lang->line('item_purchase_report');
 		$this->load->view('report-purchase-item', $data);
 	}
+
+	public function show_purchase_items_reports()
+	{
+		$startDate 	= date('Y-m-d', strtotime($this->input->post('sdate')));
+		$endDate 	= date('Y-m-d', strtotime($this->input->post('edate')));
+		$itemid 	= $this->input->post('itemid');
+		$this->output->set_content_type('application/json')->set_output(json_encode($this->buy->show_purchase_items_reports($startDate, $endDate, $itemid)));
+	}
+
+	public function get_buy_sell_history()
+	{
+		$purchase_item_id 	= $this->input->post('p_i_id');
+		$purchase_id 	= $this->input->post('p_id');
+		$data['purchase_item'] = $this->buy->get_purchase_item_by_id($purchase_item_id);
+		$data['purchase_paymentss'] = $this->buy->get_purchase_payments_by_purchase_id($purchase_id);
+		$data['purchase_cost_history'] = $this->buy->get_purchase_cost_by_purchase_id($purchase_item_id);
+		$data['sell_historyss'] = $this->buy->get_sell_history_by_purchase_item_id($purchase_id); 
+		$this->output->set_content_type('application/json')->set_output(json_encode($data));
+	}
+
 	public function show_item_purchase_report(){
 		echo $this->reports->show_item_purchase_report();
 	}
@@ -155,13 +190,36 @@ class Reports extends MY_Controller {
 	}
 	//Expired Items Report 
 	public function expired_items(){
-		$this->permission_check('expired_items_report');
 		$data=$this->data;
 		$data['page_title']=$this->lang->line('expired_items_report');
 		$this->load->view('report-expired-items', $data);
 	}
 	public function show_expired_items_report(){
 		echo $this->reports->show_expired_items_report();
+	}
+	public function suppliyers_reports()
+	{
+		$data=$this->data;
+		$data['suppliers']=$this->buy->get_all_suppliers();
+		$data['page_title']='সরবরাহকারী রিপোর্ট';
+		$this->load->view('suppliyer-reports', $data);
+	}
+	public function get_suppliers_reports_date_to_date()
+	{
+		$startDate 		= date('Y-m-d', strtotime($this->input->post('sdate')));
+		$endDate 		= date('Y-m-d', strtotime($this->input->post('edate')));
+		$supplier_id 	= $this->input->post('supp_id');
+
+		$data['purchase_item'] = $this->buy->get_purchase_item_by_date_to_date($startDate, $endDate, $supplier_id);
+
+		$this->output->set_content_type('application/json')->set_output(json_encode($data));
+	}
+	public function get_purchase_paymetns_by_purchase_id()
+	{
+		$purchase_id 	= $this->input->post('id');
+		$data = $this->buy->get_purchase_payments_by_purchase_id($purchase_id);
+
+		$this->output->set_content_type('application/json')->set_output(json_encode($data));
 	}
 
 	

@@ -1,6 +1,14 @@
 <?php
 
 $lang['dashboard']						=		'Dashboard';
+
+
+$lang['lot']						    =		'Lot';
+$lang['no']						        =		'No';
+$lang['select']						    =		'Select';
+$lang['product']						=		'Product';
+$lang['profile']						=		'Profile';
+$lang['logout']						    =		'Log Out';
 $lang['sales']							=		'Sales';
 $lang['new_sales']						=		'New Sales';
 $lang['sales_list']						=		'Sales List';

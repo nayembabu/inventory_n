@@ -107,16 +107,12 @@ class Suppliers_model extends CI_Model {
 		$supplier_code=$supplier_init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
 		//end
 
-		$query1="insert into db_suppliers(supplier_code,supplier_name,mobile,phone,email,
-											country_id,state_id,city,
-                      postcode,address,opening_balance,
+		$query1="insert into db_suppliers(supplier_code,supplier_name,mobile,
 											system_ip,system_name,
-											created_date,created_time,created_by,status,gstin,tax_number)
-											values('$supplier_code','$supplier_name','$mobile','$phone','$email',
-											'$country',$state,'$city',
-                      '$postcode','$address','$opening_balance',
+											created_date,created_time,created_by,status)
+											values('$supplier_code','$supplier_name','$mobile',
 											'$SYSTEM_IP','$SYSTEM_NAME',
-											'$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1,'$gstin','$tax_number')";
+											'$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1)";
 		
 		if ($this->db->simple_query($query1)){
 				$this->session->set_flashdata('success', 'Success!! New Supplier Added Successfully!');
@@ -261,12 +257,11 @@ class Suppliers_model extends CI_Model {
                 <i><?= $this->lang->line('supplier_details'); ?></i>
                 <address>
                   <strong><?php echo  $supplier_name; ?></strong><br>
-                  <?php echo (!empty(trim($supplier_mobile))) ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
-                  <?php echo (!empty(trim($supplier_phone))) ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
-                  <?php echo (!empty(trim($supplier_email))) ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
-                  <?php echo (!empty(trim($supplier_gst_no))) ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
-                  <?php echo (!empty(trim($supplier_tax_number))) ? $this->lang->line('tax_number').": ".$supplier_tax_number."<br>" : '';?>
-                  
+                  <?php echo $supplier_mobile ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
+                  <?php echo $supplier_phone ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
+                  <?php echo $supplier_email ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
+                  <?php echo $supplier_gst_no ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
+                  <?php echo $supplier_tax_number ? $this->lang->line('tax_number').": ".$supplier_tax_number."<br>" : '';?> 
                 </address>
               </div>
               <!-- /.col -->
@@ -285,7 +280,7 @@ class Suppliers_model extends CI_Model {
                     <td class="text-right"><?= $this->lang->line('paid_amount'); ?></td>
                     <td class="text-right"><?= $CI->currency($total_paid_amount); ?></td>
                   </tr>
-                  <tr>
+                  <tr> 
                     <td colspan="2"></td>
                     <td class="text-right"><?= $this->lang->line('purchase_due'); ?></td>
                     <td class="text-right"><?= $CI->currency($supplier_purchase_due); ?></td>
@@ -561,11 +556,11 @@ class Suppliers_model extends CI_Model {
                 <i><?= $this->lang->line('supplier_details'); ?></i>
                 <address>
                   <strong><?php echo  $supplier_name; ?></strong><br>
-                  <?php echo (!empty(trim($supplier_mobile))) ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
-                  <?php echo (!empty(trim($supplier_phone))) ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
-                  <?php echo (!empty(trim($supplier_email))) ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
-                  <?php echo (!empty(trim($supplier_gst_no))) ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
-                  <?php echo (!empty(trim($supplier_tax_number))) ? $this->lang->line('tax_number').": ".$supplier_tax_number."<br>" : '';?>
+                  <?php echo $supplier_mobile ? $this->lang->line('mobile').": ".$supplier_mobile."<br>" : '';?>
+                  <?php echo $supplier_phone ? $this->lang->line('phone').": ".$supplier_phone."<br>" : '';?>
+                  <?php echo $supplier_email ? $this->lang->line('email').": ".$supplier_email."<br>" : '';?>
+                  <?php echo $supplier_gst_no ? $this->lang->line('gst_number').": ".$supplier_gst_no."<br>" : '';?>
+                  <?php echo $supplier_tax_number ? $this->lang->line('tax_number').": ".$supplier_tax_number."<br>" : '';?>
                   
                 </address>
               </div>

@@ -51,4 +51,5 @@
   </script>
   <!-- jQuery 3 -->
   <script src="<?php echo $theme_link; ?>plugins/jQuery/jq3.min.js"></script>
-  
+  <!-- jQuery UI -->
+  <script src="<?php echo $theme_link; ?>plugins/jQueryUI/jquery-ui.min.js"></script>

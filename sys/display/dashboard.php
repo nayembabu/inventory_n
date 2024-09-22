@@ -61,57 +61,6 @@
       
     <!-- Main content -->
     <section class="content">
-      <div class="row">
-          <div class="col-md-3 col-sm-6 col-xs-12">
-             <div class="info-box">
-                <span class="info-box-icon bg-aqua"><i class="ion ion-bag"></i></span>
-                <div class="info-box-content">
-                   <span class="text-bold text-uppercase"><?= $this->lang->line('total_purchase_due'); ?></span>
-                   <span class="info-box-number"><?= $CI->currency(app_number_format($purchase_due)); ?></span>
-                </div>
-                <!-- /.info-box-content -->
-             </div>
-             <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-md-3 col-sm-6 col-xs-12">
-             <div class="info-box">
-                <span class="info-box-icon bg-yellow"><i class="fa fa-dollar"></i></span>
-                <div class="info-box-content">
-                   <span class="text-bold text-uppercase"><?= $this->lang->line('total_sales_due'); ?></span>
-                   <span class="info-box-number"><?= $CI->currency(app_number_format($sales_due)); ?></span>
-                </div>
-                <!-- /.info-box-content -->
-             </div>
-             <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-md-3 col-sm-6 col-xs-12">
-             <div class="info-box">
-                <span class="info-box-icon bg-green"><i class="fa fa-cart-plus"></i></span>
-                <div class="info-box-content">
-                   <span class="text-bold text-uppercase"><?= $this->lang->line('total_sales_amount'); ?></span>
-                   <span class="info-box-number"><?= $CI->currency(app_number_format($tot_sal_grand_total)); ?></span>
-                </div>
-                <!-- /.info-box-content -->
-             </div>
-             <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-md-3 col-sm-6 col-xs-12">
-             <div class="info-box">
-                <span class="info-box-icon bg-red "><i class="fa fa-minus-square-o"></i></span>
-                <div class="info-box-content">
-                   <span class="text-bold text-uppercase"><?= $this->lang->line('total_expense_amount'); ?></span>
-                     <span class="info-box-number"><?= $CI->currency(app_number_format($tot_exp)); ?></span>
-                   </span>
-                </div>
-                <!-- /.info-box-content -->
-             </div>
-             <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-       </div>
        <div class="row">
           <div class="col-md-3 col-sm-6 col-xs-12">
              <div class="info-box">
@@ -229,142 +178,14 @@
         <!-- /.col -->
         
       </div>
-      <!-- /.row -->
-     <div class="row">
-     <div class="col-md-8">
-      <!-- BAR CHART -->
-          <div class="box box-success">
-            <div class="box-header with-border">
-              <h3 class="box-title text-uppercase"><?= $this->lang->line('purchase_and_sales_bar_chart'); ?></h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body">
-              <div class="chart">
-                <canvas id="barChart" style="height:230px"></canvas>
-              </div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-4">
-
-
-          <!-- PRODUCT LIST 
-          <div class="box box-primary">
-            <div class="box-header with-border">
-               <h3 class="box-title text-uppercase"><?= $this->lang->line('recently_added_items'); ?></h3> 
-            </div>
-            
-            <div class="box-body table-responsive">
-              
-            
-                      <table class="table table-bordered table-responsive">
-                        <tr class='bg-blue'>
-                          <td>Sl.No</td>
-                          <td><?= $this->lang->line('item_name'); ?></td>
-                          <td><?= $this->lang->line('item_sales_price'); ?></td>
-                        </tr>
-                        <tbody>
-                <?php
-                    $i=1;
-                    $qs5="SELECT item_name,sales_price FROM db_items where status=1 ORDER BY id desc limit 5";
-                    $q5=$this->db->query($qs5);
-                    if($q5->num_rows() >0){
-                      
-                      foreach($q5->result() as $res5){
-                        ?>
-                        <tr>
-                          <td><?php echo $i++; ?></td>
-                          <td><?php echo $res5->item_name; ?></td>
-                          <td><?php echo $CI->currency($res5->sales_price,$with_comma=true); ?></td>
-                        </tr>
-                        
-                        <?php
-                      }
-                    }
-                    ?>
-                    </tbody>
-                    <?php if($CI->session->userdata('inv_userid')==1){ ?> 
-                      <tfoot>
-                      <tr>
-                        <td colspan="3" class="text-center"><a href="<?php echo $base_url; ?>items" class="uppercase"><?= $this->lang->line('view_all'); ?></a></td>
-                      </tr>
-                    </tfoot>
-                    <?php } ?>
-                  </table>
-                
-               
-            
-            </div>
-          
-          </div>-->
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-     </div>
-     
+      
       <!-- ############################# GRAPHS ############################## -->
      
       <!-- /.row -->
       <div class="row">
         <!-- /.row -->
      
-     <div class="col-md-6">
-          <div class="box box-primary">
-            <div class="box-header">
-              <h3 class="box-title text-uppercase"><?= $this->lang->line('expired_items'); ?></h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive">
-              <table id="" class=" datatable table table-bordered table-hover">
-                <thead>
-                <tr class='bg-blue'>
-                  <th>#</th>
-                  <th><?= $this->lang->line('item_code'); ?></th>
-                  <th><?= $this->lang->line('item_name'); ?></th>
-                  <th><?= $this->lang->line('category_name'); ?></th>
-                  <th><?= $this->lang->line('expire_date'); ?></th>
-                </tr>
-                </thead>
-                <tbody>
-        <?php
-        $qs6="SELECT a.item_name,a.item_code,b.category_name,a.expire_date from db_items as a,db_category as b where b.id=a.category_id and a.expire_date<='".date("Y-m-d")."' and a.status=1 limit 10";
-        $q6=$this->db->query($qs6);
-       
-        if($q6->num_rows()>0){
-          $i=1;
-          foreach ($q6->result() as $row){
-            echo "<tr>";
-            echo "<td>".$i++."</td>";
-            echo "<td>".$row->item_code."</td>";
-            echo "<td>".$row->item_name."</td>";
-            echo "<td>".$row->category_name."</td>";
-            echo "<td>".show_date($row->expire_date)."</td>";
-            echo "</tr>";
-          }
-        }
-        ?>
         
-                </tbody>
-                 <tfoot>
-                      <tr>
-                        <td colspan="5" class="text-center"><a href="<?=base_url('reports/expired_items'); ?>" class="uppercase"><?= $this->lang->line('view_all'); ?></a></td>
-                      </tr>
-                    </tfoot>
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
         <!-- /.col (LEFT) -->
         <div class="col-md-6">
           <div class="box box-primary">
@@ -383,27 +204,30 @@
                 </tr>
                 </thead>
                 <tbody>
-        <?php
-        $this->db->select('b.category_name,a.item_name,a.stock');
-        $this->db->from('db_items a');
-        $this->db->where('a.stock<=a.alert_qty and a.status=1');
-        $this->db->join('db_category b','b.id=a.category_id','left');
-        $this->db->order_by("a.id","desc");
-        $this->db->limit("10");
-        $q4=$this->db->get();
-       
-        if($q4->num_rows()>0){
-          $i=1;
-          foreach ($q4->result() as $row){
-            echo "<tr>";
-            echo "<td>".$i++."</td>";
-            echo "<td>".$row->item_name."</td>";
-            echo "<td>".$row->category_name."</td>";
-            echo "<td>".$row->stock."</td>";
-            echo "</tr>";
-          }
-        }
-        ?>
+                  <?php
+                      $this->db->select('b.category_name,a.item_name,a.stock,c.due_sells_bosta_ss');
+                      $this->db->from('db_items a');
+                      $this->db->where('a.stock<=a.alert_qty and a.status=1');
+                      $this->db->join('db_category b','b.id=a.category_id','left');
+                      $this->db->join('db_purchaseitems c','c.item_id=a.id','left');
+                      $this->db->order_by("a.id","desc");
+                      $this->db->limit("10");
+                      $q4=$this->db->get();
+                    
+                      if($q4->num_rows()>0){
+                        $i=1;
+                        foreach ($q4->result() as $row){
+                          if ((int)$row->due_sells_bosta_ss != 0) { 
+                            echo "<tr>";
+                            echo "<td align='center'>".$i++."</td>";
+                            echo "<td align='center'>".$row->item_name."</td>";
+                            echo "<td align='center'>".$row->category_name."</td>";
+                            echo "<td align='right' >".(int)$row->due_sells_bosta_ss." কেজি</td>";
+                            echo "</tr>";
+                          }
+                        }
+                      } 
+                  ?>
         
                 </tbody>
                 <tfoot>
@@ -429,7 +253,7 @@
                 <!-- /.box-header -->
                 <div class="box-body ">
                    <!-- <div id="bar_container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div> -->
-                   <br><br><br><br><br><br><br><br><br><br>
+                   <!-- <br><br><br><br><br><br><br><br><br><br> -->
                 </div>
                 <!-- /.box-body -->
              </div>

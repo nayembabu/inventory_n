@@ -1,4 +1,313 @@
 
+$(document).on('change', '.selected_products_item', function () {
+  let product_id = $(this).val();
+  $.ajax({
+    type: "post",
+    url: 'sales/get_due_purchase_transport_infos',
+    data: {
+      pr_id: product_id
+    },
+    success: function (rs) {
+      let html_data = '';
+      for (let n = 0; n < rs.transport_info.length; n++) {
+        html_data += `<li style="border-right: 3px solid white; padding-right: 10px;  " >
+                        <a class="clickable_get_ref_datas" href="#tab_1" data-toggle="tab" trans_ids="${rs.transport_info[n].transport_i_a_iiiiidd}" pur_trans_id_attr="${rs.transport_info[n].db_purchase_transports_info_a_idd}">${rs.transport_info[n].supplier_name} - ${rs.transport_info[n].lot_trns_ref_nop_s}</a>
+                      </li>`;
+      }
+      $('.nav_assign_ul_data').html(`<ul class="nav nav-tabs bg-gray text-bold font-italic">${html_data}</ul>`); 
+    }
+  });
+});
+
+$(document).on('click', '.clickable_get_ref_datas', function () {
+  let transport_id = $(this).attr('trans_ids');
+  let this_click_pur_trans_attr_id = $(this).attr('pur_trans_id_attr');
+  $.ajax({
+    type: "post",
+    url: "sales/get_items_details_by_purchase_item_id",
+    data: {
+      pt_id: this_click_pur_trans_attr_id
+    },
+    success: function (rs) {
+      let items_lists = '';
+
+      for (let n = 0; n < rs.purchase_item_infos.length; n++) {
+        items_lists += `<div class="col-md-3 col-xs-6 " title="" style="padding-left:5px;padding-right:5px;" >
+                            <div class="box box-default item_box" id="div_1" style="max-height: 150px;min-height: 150px;cursor: pointer;background-color:#c8c8c8; border: 2px solid black; ">
+                              <span class="label label-danger push-right" style="font-weight: bold;font-family: sans-serif;" >
+                                Qty: ${rs.purchase_item_infos[n].due_sells_bosta_ss}-${rs.product_info.unit_name} 
+                              </span>
+                              <div class="box-body box-profile">
+                                  <center>
+                                    <img class=" img-responsive item_image" style="border: 1px solid gray;" src="http://localhost/pos/theme/images/no_image.png" alt="Item picture">
+                                  </center>
+                                  <lable class="text-center search_item" style="font-weight: bold;font-family: sans-serif;" id="item_0">
+                                    ${rs.purchase_item_infos[n].ref_lot_no} <br>   
+                                    <span class="" style="font-family: sans-serif;font-size:150%; ">
+                                        ৳  0.00 
+                                    </span>
+                                  </lable>
+                              </div>
+                            </div>
+                        </div>`
+      }
+
+      $('.ref_lots_nos_s').val(``);
+      $('.ttl_data_show_rows').html(items_lists);
+      $('.submit_btn_selling_sys').html('');
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$(document).on('change', '.select_selling_type', function () {
+  let type_of_sell = $(this).val();
+  if (type_of_sell == 1) {
+    $('.set_selling_html_formate').html(
+      `<div class="input-group">
+            <span class="input-group-addon font20" id="basic-addon1">পরিমাণ</span>
+            <input type="text" class="form-control font20 buying_quantity_bosta selling_qnt_bosta_s " placeholder="পরিমাণ" style="text-align: right; "   >
+            <span class="input-group-addon font20">বস্তা</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">প্রতি কেজির দাম </span>
+            <input type="text" class="form-control font20 prices_per_kgs selling_price_per_kg_ss " placeholder="পরিমাণ" style="text-align: right; "   >
+            <span class="input-group-addon font20">টাকা</span>
+        </div>
+        <span class="input-group-addon validation_for_lav_loss " ></span>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">এক বস্তাতে কতো কেজি</span>
+            <input type="text" class="form-control font20 qnty_per_bosta selling_qnt_per_kg_ss " placeholder="পরিমাণ" style="text-align: right; "    >
+            <span class="input-group-addon font20">কেজি</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">প্রতি বস্তার দাম </span>
+            <input type="text" class="form-control font20 prices_per_bostas  " placeholder="পরিমাণ" style="text-align: right; "   >
+            <span class="input-group-addon font20">টাকা</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">কৈফিয়ত </span>
+            <input type="text" class="form-control font20 sell_discount_price " placeholder="পরিমাণ" style="text-align: right; "   >
+            <span class="input-group-addon font20">টাকা</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; font-size: 25px; font-weight: bold; width: 100%; ">
+          <div style="float: left;"> টোটাল </div>
+          <div style="float: right;">
+            <span class="total_price_of_sell">0.00 </span>
+          </div>
+        </div>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">জমা দিছে </span>
+            <input type="text" class="form-control font20 sell_joma_dan " placeholder="পরিমাণ" style="text-align: right; "   >
+            <span class="input-group-addon font20">টাকা</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; font-size: 20px; width: 100%; ">
+          <div style="float: left;"> বকেয়া </div>
+          <div style="float: right;">
+            <span class="due_of_total_sell">0.00</span>
+          </div>
+        </div>
+        <div class="input-group otirikto_lav_hoice " style="margin-top: 10px; font-size: 20px; width: 100%; ">
+        </div>`
+    );
+    $('.submit_btn_selling_sys').html(`<div class="btn btn-success btn-lg selling_this_btn " style="font-size: 40px; font-weight: bold; " > বিক্রয় করুন </div>`);
+  }else if (type_of_sell == 2) {
+    $('.set_selling_html_formate').html(
+      `<div class="input-group">
+            <span class="input-group-addon font20" id="basic-addon1">পরিমাণ</span>
+            <input type="text" class="form-control font20 buying_quantity_bosta selling_qnt_bosta_s " placeholder="পরিমাণ" style="text-align: right; "   >
+            <span class="input-group-addon font20">বস্তা</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">প্রতি কেজির প্রস্তাবিত দাম </span>
+            <input type="text" class="form-control font20 prices_per_kgs selling_price_per_kg_ss" placeholder="পরিমাণ" style="text-align: right; "   >
+            <span class="input-group-addon font20">টাকা</span>
+        </div>
+        <span class="input-group-addon validation_for_lav_loss " ></span>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">এক বস্তাতে কতো কেজি</span>
+            <input type="text" class="form-control font20 qnty_per_bosta selling_qnt_per_kg_ss" placeholder="পরিমাণ" style="text-align: right; "    >
+            <span class="input-group-addon font20">কেজি</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">প্রতি বস্তার প্রস্তাবিত দাম</span>
+            <input type="text" class="form-control font20 prices_per_bostas " placeholder="পরিমাণ" style="text-align: right; " >
+            <span class="input-group-addon font20">টাকা</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">কৈফিয়ত </span>
+            <input type="text" class="form-control font20 sell_discount_price " placeholder="পরিমাণ" style="text-align: right; "   >
+            <span class="input-group-addon font20">টাকা</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; font-size: 25px; font-weight: bold; width: 100%; ">
+          <div style="float: left;"> টোটাল </div>
+          <div style="float: right;">
+            <span class="total_price_of_sell">0.00 </span>
+          </div>
+        </div>
+        <div class="input-group " style="margin-top: 10px; ">
+            <span class="input-group-addon font20" id="basic-addon1">জমা দিছে </span>
+            <input type="text" class="form-control font20 sell_joma_dan " placeholder="পরিমাণ" style="text-align: right; "   >
+            <span class="input-group-addon font20">টাকা</span>
+        </div>
+        <div class="input-group " style="margin-top: 10px; font-size: 20px; width: 100%; ">
+          <div style="float: left;"> বকেয়া </div>
+          <div style="float: right;">
+            <span class="due_of_total_sell">0.00</span>
+          </div>
+        </div>
+        <div class="input-group otirikto_lav_hoice " style="margin-top: 10px; font-size: 20px; width: 100%; ">
+        </div>`
+    );
+    $('.submit_btn_selling_sys').html(`<div class="btn btn-success btn-lg selling_this_btn " style="font-size: 40px; font-weight: bold; " > বিক্রয় করুন </div>`);
+  }else {
+    $('.set_selling_html_formate').html('');
+    $('.submit_btn_selling_sys').html('');
+  }
+});
+
+$(document).on('keyup', '.qnty_per_bosta, .buying_quantity_bosta, .prices_per_kgs', function () {
+  let sell_quantity_bosta = $('.buying_quantity_bosta').val();
+  let kg_per_bosta = $('.qnty_per_bosta').val();
+  let prices_per_kgs = $('.prices_per_kgs').val();
+  if ($.isNumeric(sell_quantity_bosta)) {
+    sell_quantity_bosta = parseFloat($('.buying_quantity_bosta').val());
+  } else {
+    sell_quantity_bosta = 0;
+  }
+  if ($.isNumeric(kg_per_bosta)) {
+    kg_per_bosta = parseFloat($('.qnty_per_bosta').val());
+  } else {
+    kg_per_bosta = 0;
+  }
+  if ($.isNumeric(prices_per_kgs)) {
+    prices_per_kgs = parseFloat($('.prices_per_kgs').val());
+  } else {
+    prices_per_kgs = 0;
+  }
+
+  let price_per_bosta = kg_per_bosta * prices_per_kgs;
+  let total_price_of_sell = price_per_bosta * sell_quantity_bosta;
+
+  $('.prices_per_bostas').val(price_per_bosta);
+  $('.total_price_of_sell').html(total_price_of_sell);
+  $('.due_of_total_sell').html(total_price_of_sell);
+  $('.sell_joma_dan').val(0);
+});
+
+$(document).on('keyup', '.sell_joma_dan, .sell_discount_price', function () {
+  let total_discount_price = $('.sell_discount_price').val();
+  let sell_joma_dan = $('.sell_joma_dan').val();
+  let total_price = $('.total_price_of_sell').html();
+  if ($.isNumeric(total_discount_price)) {
+    total_discount_price = parseFloat($('.sell_discount_price').val());
+  } else {
+    total_discount_price = 0;
+  }
+  if ($.isNumeric(sell_joma_dan)) {
+    sell_joma_dan = parseFloat($('.sell_joma_dan').val());
+  } else {
+    sell_joma_dan = 0;
+  }
+  if ($.isNumeric(total_price)) {
+    total_price = parseFloat($('.total_price_of_sell').html());
+  } else {
+    total_price = 0;
+  }
+
+  let due_of_total_sell = total_price - sell_joma_dan - total_discount_price;
+  if (due_of_total_sell < 0) {
+    $('.due_of_total_sell').html(0);
+    // $('.sell_joma_dan').val(0);
+    // $('.otirikto_lav_hoice').html(
+    //     `<div style="float: left; color: red;"> অতিরিক্ত নিচ্ছেন </div>
+    //     <div style="float: right; color: red; ">
+    //       <span class="">${sell_joma_dan - total_price}</span>
+    //     </div>`
+    // );
+  }else {
+    $('.due_of_total_sell').html(due_of_total_sell);
+    $('.otirikto_lav_hoice').html('');
+  }
+});
+
+$(document).on('click', '.selling_this_btn', function () { 
+  if(confirm("আপনি কি বিক্রয় করতে আগ্রহী ? ")) {
+    $.ajax({
+      type: "post",
+      url: "sales/sales_this_product_qnty",
+      data: {
+        product_ids:        $('.selected_products_item').val(),
+        purchase_item_id:   $('.clickable_item_selected').attr('purchase_item_idss'),
+        selling_type_1_2:   $('.select_selling_type').val(),
+        selling_poriman:    $('.selling_qnt_bosta_s').val(),
+        price_per_kg:       $('.selling_price_per_kg_ss').val(),
+        qnt_kgs_per_bosta:  $('.selling_qnt_per_kg_ss').val(),
+        prices_per_bosta:   $('.prices_per_bostas').val(),
+        total_price_s:      $('.total_price_of_sell').html(),
+        sell_jomass:        $('.sell_joma_dan').val(),
+        sell_discount:      $('.sell_discount_price').val(),
+        sell_due:           $('.due_of_total_sell').html(),
+        customer_id:        $('.customer_uniqs_id').val(),
+        sell_date:          $('.sales_datess').val(),
+        reflot_no:          $('.ref_lots_nos_s').val(),
+        purchase_auto_id:   $('.clickable_item_selected').attr('purchase_a_ids'),
+      },
+      success: function (rsp) {
+        if (rsp == 1) {
+          toastr["danger"]("আপনার কোথাও ভুল হচ্ছে, চেক করুন। "); 
+        } else {
+          $('.ttl_data_show_rows').html('');
+          $('.set_selling_html_formate').html('');
+          $('.submit_btn_selling_sys').html('');
+          toastr["success"]("আপনার বিক্রয় সফল হয়েছে। ");
+        }
+      }
+    });
+  }
+});
+
+$(document).on('keyup', '.selling_qnt_bosta_s', function () {
+  let sell_quantity = parseInt($(this).val());
+  let total_due_qnty = parseInt($('.obosistho_malamal').html());
+  if (sell_quantity > total_due_qnty) {
+    alert('ভুল, এতো পরিমাণ পণ্য নেই।');
+    $(this).val('');
+  }
+});
+
+$(document).on('keyup', '.selling_price_per_kg_ss', function () {
+  let sales_prices_per_kg = parseFloat($(this).val());
+  let purchase_price = parseFloat($('.calculate_price_per_bostasss').html());
+  console.log(sales_prices_per_kg-purchase_price);
+  if (0 > (sales_prices_per_kg-purchase_price)) {
+    $('.validation_for_lav_loss').html(`<span style="color: red; "> আপনি লসে বিক্রি করতেছেন? </span>`);
+  }else {
+    $('.validation_for_lav_loss').html(`<span style="color: green; "> আপনি ${parseInt(sales_prices_per_kg-purchase_price)} টাকা লাভে বিক্রি করতেছেন। </span>`);
+  }
+});
+
+
+
+
+
 //On Enter Move the cursor to desigtation Id
 function shift_cursor(kevent,target){
 
@@ -554,3 +863,352 @@ function delete_sales_payment(payment_id){
      $("#item_search").attr({ disabled: true,}); 
     }
   });*/
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+         //Customer Selection Box Search
+         function getCustomerSelectionId() {
+          return '#customer_id';
+        }
+
+        $(document).ready(function () {
+
+           var customer_id = "<?= (!empty($customer_id)) ? $customer_id : '';  ?>";
+
+           autoLoadFirstCustomer(customer_id);
+
+        });
+        //Customer Selection Box Search - END
+
+        //Initialize Select2 Elements
+            $(".select2").select2();
+        //Date picker
+            $('.datepicker').datepicker({
+              autoclose: true,
+             format: 'dd-mm-yyyy',
+             todayHighlight: true
+            });
+         
+     
+        
+
+       /* function update_price(row_id,item_cost){
+       
+         var sales_price=$("#sales_price_"+row_id).val().trim();
+         if(sales_price!='' || sales_price==0) {sales_price = parseFloat(sales_price); }
+
+       
+         var item_price=parseFloat($("#tr_sales_price_temp_"+row_id).val().trim());
+
+         if(sales_price<item_cost){
+       
+           $("#sales_price_"+row_id).parent().addClass('has-error');
+         }else{
+           $("#sales_price_"+row_id).parent().removeClass('has-error');
+         }
+
+         make_subtotal($("#tr_item_id_"+row_id).val(),row_id);
+       }*/
+
+       /*function set_to_original(i,purchase_price) {
+                   var sales_price=parseFloat($("#td_data_"+i+"_10").val().trim());
+         if(sales_price!='' || sales_price==0) {sales_price = parseFloat(sales_price); }
+
+                   var item_price=parseFloat($("#tr_purchase_price_"+i).val().trim());
+
+         if(sales_price<purchase_price){
+           toastr["success"]("Default Price Set "+item_price);
+           $("#td_data_"+i+"_10").parent().removeClass('has-error');
+           $("#td_data_"+i+"_10").val(item_price);
+         }
+         calculate_tax(i);
+       }*/
+
+        /* ---------- CALCULATE TAX -------------*/
+        function calculate_tax(i){ //i=Row
+           set_tax_value(i);
+
+          //Find the Tax type and Tax amount
+          var tax_type = $("#tr_tax_type_"+i).val();
+          var tax_amount = $("#td_data_"+i+"_11").val();
+
+          var qty=$("#td_data_"+i+"_3").val().trim();
+          var sales_price=parseFloat($("#td_data_"+i+"_10").val().trim());
+          $("#td_data_"+i+"_4").val(sales_price);
+          /*Discounr*/
+          var discount_amt=$("#td_data_"+i+"_8").val().trim();
+              discount_amt   =(isNaN(parseFloat(discount_amt)))    ? 0 : parseFloat(discount_amt);
+
+          var amt=parseFloat(qty) * sales_price;//Taxable
+
+          var total_amt=amt-discount_amt;
+          total_amt = (tax_type=='Inclusive') ? total_amt : parseFloat(total_amt) + parseFloat(tax_amount);
+          
+          //Set Unit cost
+          $("#td_data_"+i+"_9").val('').val(total_amt.toFixed(2));
+       
+          final_total();
+        }
+       
+        /* ---------- CALCULATE GST END -------------*/
+
+       
+        /* ---------- Final Description of amount ------------*/
+        function final_total(){
+          
+
+          var rowcount=$("#hidden_rowcount").val();
+          var subtotal=parseFloat(0);
+          
+          var other_charges_per_amt=parseFloat(0);
+          var other_charges_total_amt=0;
+          var taxable=0;
+         if($("#other_charges_input").val()!=null && $("#other_charges_input").val()!=''){
+            
+             other_charges_tax_id =$('option:selected', '#other_charges_tax_id').attr('data-tax');
+            other_charges_input=$("#other_charges_input").val();
+            if(other_charges_tax_id>0){
+
+              other_charges_per_amt=(other_charges_tax_id * other_charges_input)/100;
+            }
+            
+            taxable=parseFloat(other_charges_per_amt)+parseFloat(other_charges_input);//Other charges input
+            other_charges_total_amt=parseFloat(other_charges_per_amt)+parseFloat(other_charges_input);
+          }
+          else{
+            //$("#other_charges_amt").html('0.00');
+          }
+          
+        
+          var tax_amt=0;
+          var actual_taxable=0;
+          var total_quantity=0;
+        
+          for(i=1;i<=rowcount;i++){
+        
+            if(document.getElementById("td_data_"+i+"_3")){
+              //customer_id must exist
+              if($("#td_data_"+i+"_3").val()!=null && $("#td_data_"+i+"_3").val()!=''){
+                   actual_taxable=actual_taxable+ + +(parseFloat($("#td_data_"+i+"_13").val()).toFixed(2) * parseFloat($("#td_data_"+i+"_3").val()));
+                   subtotal=subtotal+ + +parseFloat($("#td_data_"+i+"_9").val()).toFixed(2);
+                   if($("#td_data_"+i+"_7").val()>=0){
+                     tax_amt=tax_amt+ + +$("#td_data_"+i+"_7").val();
+                   }   
+                   total_quantity +=parseFloat($("#td_data_"+i+"_3").val().trim());
+               }
+                  
+            }//if end
+          }//for end
+          
+         
+         //Show total Sales Quantitys
+          $(".total_quantity").html(total_quantity);
+
+          //Apply Output on screen
+          //subtotal
+          if((subtotal!=null || subtotal!='') && (subtotal!=0)){
+            
+            //subtotal
+            $("#subtotal_amt").html(subtotal.toFixed(2));
+            
+            //other charges total amount
+            $("#other_charges_amt").html(parseFloat(other_charges_total_amt).toFixed(2));
+            
+            //other charges total amount
+           
+
+            taxable=taxable+subtotal;
+            
+            //discount_to_all_amt
+           // if($("#discount_to_all_input").val()!=null && $("#discount_to_all_input").val()!=''){
+                var discount_input=parseFloat($("#discount_to_all_input").val());
+                discount_input = isNaN(discount_input) ? 0 : discount_input;
+                var discount=0;
+                if(discount_input>0){
+                    var discount_type=$("#discount_to_all_type").val();
+                    if(discount_type=='in_fixed'){
+                      taxable-=discount_input;
+                      discount=discount_input;
+                      //Minus
+                    }
+                    else if(discount_type=='in_percentage'){
+                        discount=(taxable*discount_input)/100;
+                       taxable-=discount;
+            
+                    }
+                }
+                else{
+                   //discount += $("#")
+                }
+                  discount=parseFloat(discount).toFixed(2);
+                  
+                   $("#discount_to_all_amt").html(discount);  
+                   $("#hidden_discount_to_all_amt").val(discount);  
+            //}
+            //subtotal_round=Math.round(taxable);
+            subtotal_round=round_off(taxable);//round_off() method custom defined
+            subtotal_diff=subtotal_round-taxable;
+        
+            $("#round_off_amt").html(parseFloat(subtotal_diff).toFixed(2)); 
+            $("#total_amt").html(parseFloat(subtotal_round).toFixed(2)); 
+            if(save_operation()){
+              $("#amount").val(parseFloat(subtotal_round).toFixed(2));
+            }
+            $("#hidden_total_amt").val(parseFloat(subtotal_round).toFixed(2)); 
+          }
+          else{
+            $("#subtotal_amt").html('0.00'); 
+            $("#tax_amt").html('0.00'); 
+            $("#round_off_amt").html('0.00'); 
+            $("#total_amt").html('0.00'); 
+            $("#amount").val('0.00');
+            $("#hidden_total_amt").html('0.00'); 
+            $("#discount_to_all_amt").html('0.00'); 
+            $("#hidden_discount_to_all_amt").html('0.00'); 
+            $("#subtotal_amt").html('0.00'); 
+            $("#other_charges_amt").html('0.00');  
+            $("#amount").val('0.00');  
+          }
+          
+         // adjust_payments();
+         //alert("final_total() end");
+        }
+        /* ---------- Final Description of amount end ------------*/
+         
+        function removerow(id){//id=Rowid
+          
+        $("#row_"+id).remove();
+        final_total();
+        failed.currentTime = 0;
+       failed.play();
+        }
+              
+    
+
+   function enable_or_disable_item_discount(){
+     /*var discount_input=parseFloat($("#discount_to_all_input").val());
+     discount_input = isNaN(discount_input) ? 0 : discount_input;
+     if(discount_input>0){
+       $(".item_discount").attr({
+         'readonly': true,
+         'style': 'border-color:red;cursor:no-drop',
+       });
+     }
+     else{
+       $(".item_discount").attr({
+         'readonly': false,
+         'style': '',
+       });
+     }*/
+
+     var rowcount=$("#hidden_rowcount").val();
+     for(k=1;k<=rowcount;k++){
+      if(document.getElementById("tr_item_id_"+k)){
+        calculate_tax(k);
+      }//if end
+    }//for end
+
+     //final_total();
+   }
+
+   //Sale Items Modal Operations Start
+   function show_sales_item_modal(row_id){
+     $('#sales_item').modal('toggle');
+     $("#popup_tax_id").select2();
+
+     //Find the item details
+     var item_name = $("#td_data_"+row_id+"_1").html();
+     var tax_type = $("#tr_tax_type_"+row_id).val();
+     var tax_id = $("#tr_tax_id_"+row_id).val();
+     var description = $("#description_"+row_id).val();
+
+     /*Discount*/
+     var item_discount_input = $("#item_discount_input_"+row_id).val();
+     var item_discount_type = $("#item_discount_type_"+row_id).val();
+
+     //Set to Popup
+     $("#item_discount_input").val(item_discount_input);
+     $("#item_discount_type").val(item_discount_type).select2();
+
+     $("#popup_item_name").html(item_name);
+     $("#popup_tax_type").val(tax_type).select2();
+     $("#popup_tax_id").val(tax_id).select2();
+     $("#popup_description").val(description);
+     $("#popup_row_id").val(row_id);
+   }
+
+   function set_info(){
+     var row_id = $("#popup_row_id").val();
+     var tax_type = $("#popup_tax_type").val();
+     var tax_id = $("#popup_tax_id").val();
+     var description = $("#popup_description").val();
+     var tax_name = ($('option:selected', "#popup_tax_id").attr('data-tax-value'));
+     var tax = parseFloat($('option:selected', "#popup_tax_id").attr('data-tax'));
+
+     /*Discounr*/
+     var item_discount_input = $("#item_discount_input").val();
+     var item_discount_type = $("#item_discount_type").val();
+
+     //Set it into row 
+     $("#item_discount_input_"+row_id).val(item_discount_input);
+     $("#item_discount_type_"+row_id).val(item_discount_type);
+
+     $("#tr_tax_type_"+row_id).val(tax_type);
+     $("#tr_tax_id_"+row_id).val(tax_id);
+     $("#tr_tax_value_"+row_id).val(tax);//%
+     $("#description_"+row_id).val(description);
+     $("#td_data_"+row_id+"_12").html(tax_name);
+     
+     calculate_tax(row_id);
+     $('#sales_item').modal('toggle');
+   }
+   function set_tax_value(row_id){
+     //get the sales price of the item
+     var tax_type = $("#tr_tax_type_"+row_id).val();
+     var tax = $("#tr_tax_value_"+row_id).val(); //%
+     var qty=$("#td_data_"+row_id+"_3").val().trim();
+         qty = (isNaN(qty)) ? 0 :qty;
+     var sales_price = parseFloat($("#td_data_"+row_id+"_10").val());
+         sales_price = (isNaN(sales_price)) ? 0 :sales_price;
+         sales_price = sales_price * qty;
+
+     /*Discount*/
+     var item_discount_type = $("#item_discount_type_"+row_id).val();
+     var item_discount_input = parseFloat($("#item_discount_input_"+row_id).val());
+         item_discount_input = (isNaN(item_discount_input)) ? 0 :item_discount_input;
+
+     //Calculate discount      
+     var discount_amt=(item_discount_type=='Percentage') ? ((sales_price) * item_discount_input)/100 : (item_discount_input * qty);
+     
+     sales_price-=parseFloat(discount_amt);
+
+     var tax_amount = (tax_type=='Inclusive') ? calculate_inclusive(sales_price,tax) : calculate_exclusive(sales_price,tax);
+     
+     $("#td_data_"+row_id+"_8").val(discount_amt);
+
+     $("#td_data_"+row_id+"_11").val(tax_amount);
+   }
+   //Sale Items Modal Operations End
+
+ 
+   function item_qty_input(i){
+  
+     var item_qty=$("#td_data_"+i+"_3").val();
+     var available_qty=$("#tr_available_qty_"+i+"_13").val();
+     if(parseFloat(item_qty)>parseFloat(available_qty)){
+       $("#td_data_"+i+"_3").val(available_qty);
+       toastr["warning"]("Oops! You have only "+available_qty+" items in Stock");
+     }
+     calculate_tax(i);
+   }

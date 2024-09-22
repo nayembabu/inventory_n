@@ -47,7 +47,7 @@
                                        <div class="input-group-addon">
                                           <i class="fa fa-calendar"></i>
                                        </div>
-                                       <input type="text" class="form-control pull-right datepicker" id="from_date" name="from_date" onkeyup="shift_cursor(event,'to_date')" value="<?php echo show_date(date('d-m-Y'));?>">
+                                       <input type="text" class="form-control pull-right datepicker" id="from_date" name="from_date" value="<?php echo show_date(date('d-m-Y'));?>">
                                     </div>
                                     <span id="sales_date_msg" style="display:none" class="text-danger"></span>
                                  </div>
@@ -57,12 +57,13 @@
                                        <div class="input-group-addon">
                                           <i class="fa fa-calendar"></i>
                                        </div>
-                                       <input type="text" class="form-control pull-right datepicker" id="to_date" name="to_date" onkeyup="shift_cursor(event,'category_name')" value="<?php echo show_date(date('d-m-Y'));?>">
+                                       <input type="text" class="form-control pull-right datepicker" id="to_date" name="to_date" value="<?php echo show_date(date('d-m-Y'));?>">
                                     </div>
                                     <span id="sales_date_msg" style="display:none" class="text-danger"></span>
                                  </div>
                               </div>
-                              <div class="form-group">
+                              
+                              <div class="form-group" style="display: none; ">
                                  <label for="supplier_id" class="col-sm-2 control-label"><?= $this->lang->line('supplier_name'); ?></label>
                                  <div class="col-sm-3">
                                     <select class="form-control select2 " id="supplier_id" name="supplier_id"  style="width: 100%;">
@@ -87,12 +88,7 @@
                            <div class="box-footer">
                               <div class="col-sm-8 col-sm-offset-2 text-center">
                                  <div class="col-md-3 col-md-offset-3">
-                                    <button type="button" id="view" class=" btn btn-block btn-success" title="Save Data">Show</button>
-                                 </div>
-                                 <div class="col-sm-3">
-                                    <a href="<?=base_url('dashboard');?>">
-                                    <button type="button" class="col-sm-3 btn btn-block btn-warning close_btn" title="Go Dashboard">Close</button>
-                                    </a>
+                                    <button type="button" id="view" class=" btn btn-block btn-lg btn-success " title="Save Data">Show</button>
                                  </div>
                               </div>
                            </div>
@@ -120,15 +116,13 @@
                            <table class="table table-bordered table-hover " id="report-data" >
                               <thead>
                                  <tr class="bg-blue">
-                                    <th style="">#</th>
-                                    <th style=""><?= $this->lang->line('invoice_no'); ?></th>
-                                    <th style=""><?= $this->lang->line('purchase_date'); ?></th>
-                                    <th style=""><?= $this->lang->line('supplier_id'); ?></th>
-                                    <th style=""><?= $this->lang->line('supplier_name'); ?></th>
-                                    <th style=""><?= $this->lang->line('invoice_total'); ?>(<?= $CI->currency(); ?>)</th>
-                                    <th style=""><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
-                                    <th style=""><?= $this->lang->line('due_amount'); ?>(<?= $CI->currency(); ?>)</th>
-                                    <th style=""><?= $this->lang->line('due_days'); ?></th>
+                                    <th>#</th>
+                                    <th>চালান </th>
+                                    <th>ক্রয়ের তারিখ</th>
+                                    <th>আমদানীকারক</th>
+                                    <th>মোট চালান মূল্য(<?= $CI->currency(); ?>)</th>
+                                    <th>পরিশোধ(<?= $CI->currency(); ?>)</th>
+                                    <th>বকেয়া(<?= $CI->currency(); ?>)</th>
                                  </tr>
                               </thead>
                               <tbody id="tbodyid">
@@ -142,7 +136,7 @@
                </div>
             </section>
          </div>
-         <!-- /.content-wrapper -->
+         <!-- /.content-wrapper --> 
          <?php include"footer.php"; ?>
          <!-- Add the sidebar's background. This div must be placed
             immediately after the control sidebar -->

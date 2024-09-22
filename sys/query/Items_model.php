@@ -110,61 +110,6 @@ class Items_model extends CI_Model {
 		$this->db->trans_begin();
 		$this->db->trans_strict(TRUE);
 
-		$file_name='';
-		if(!empty($_FILES['item_image']['name'])){
-
-			$new_name = time();
-			$config['file_name'] = $new_name;
-			$config['upload_path']          = './uploads/items/';
-	        $config['allowed_types']        = 'jpg|png|jpeg';
-	        $config['max_size']             = 1024;
-	        $config['max_width']            = 1000;
-	        $config['max_height']           = 1000;
-	       
-	        $this->load->library('upload', $config);
-
-	        if ( ! $this->upload->do_upload('item_image'))
-	        {	
-	                $error = array('error' => $this->upload->display_errors());
-	                print($error['error']);
-	                exit();
-	        }
-	        else
-	        {		
-	        	$file_name=$this->upload->data('file_name');
-	        	/*Create Thumbnail*/
-	        	$config['image_library'] = 'gd2';
-				$config['source_image'] = 'uploads/items/'.$file_name;
-				$config['create_thumb'] = TRUE;
-				$config['maintain_ratio'] = TRUE;
-				$config['width']         = 75;
-				$config['height']       = 50;
-				$this->load->library('image_lib', $config);
-				$this->image_lib->resize();
-				//end
-
-	        	
-	        }
-		}
-		
-		//Validate This items already exist or not
-		/*$query=$this->db->query("select * from db_items where upper(item_name)=upper('$item_name')");
-		if($query->num_rows()>0){
-			return "Sorry! This Items Name already Exist.";
-		}*/
-		
-		/*$qs5="select item_init from db_company";
-		$q5=$this->db->query($qs5);
-		$item_init=$q5->row()->item_init;*/
-
-		//Create items unique Number
-		/*$this->db->query("ALTER TABLE db_items AUTO_INCREMENT = 1");
-		$qs4="select coalesce(max(id),0)+1 as maxid from db_items";
-		$q1=$this->db->query($qs4);
-		$maxid=$q1->row()->maxid;
-		$item_code=$item_init.str_pad($maxid, 4, '0', STR_PAD_LEFT);*/
-		//end
-
 		$new_opening_stock = (empty($new_opening_stock)) ? 0 :$new_opening_stock;
 		//$stock = $current_opening_stock + $new_opening_stock;
 
@@ -175,15 +120,11 @@ class Items_model extends CI_Model {
 
 		if(empty($discount)){ $discount=0; }
 
-		$query1="insert into db_items(description,item_code,item_name,brand_id,category_id,sku,hsn,unit_id,alert_qty,lot_number,expire_date,
-									price,tax_id,purchase_price,tax_type,profit_margin,
-									sales_price,custom_barcode,final_price,
-									system_ip,system_name,created_date,created_time,created_by,status,discount_type,discount)
+		$query1="insert into db_items(item_code,item_name,unit_id,
+									system_ip,system_name,created_date,created_time,created_by,status)
 
-							values('$description','$item_code','$item_name','$brand_id','$category_id','$sku','$hsn','$unit_id','$alert_qty','$lot_number','$expire_date',
-									'$price','$tax_id','$purchase_price','$tax_type',$profit_margin,
-									'$sales_price','$custom_barcode','$final_price',
-									'$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1,'$discount_type','$discount')";
+							values('$item_code','$item_name','$unit_id',
+									'$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1)";
 		
 		$query1=$this->db->simple_query($query1);
 		if(!$query1){

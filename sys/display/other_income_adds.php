@@ -2,9 +2,10 @@
 <html>
 
 <head>
-<!-- TABLES CSS CODE -->
-<?php include"comman/code_css_form.php"; ?>
-<!-- </copy> -->  
+    <base href="<?php echo base_url(); ?>" target="">
+    <!-- TABLES CSS CODE -->
+    <?php include"comman/code_css_form.php"; ?>
+    <!-- </copy> -->  
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -12,27 +13,18 @@
  
  <?php include"sidebar.php"; ?> 
  
-  <?php
-	
-	if(!isset($expense_amt)){
-    $category_id =$expense_for=$note=$expense_amt=$q_id=$reference_no='';
-    $expense_date=show_date(date("d-m-Y"));
-	}
- ?>
- 
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <?= $this->lang->line('expense'); ?>
+        ইনকাম
         <small>Add/Update Expense</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="<?php echo $base_url; ?>expense"><?= $this->lang->line('expenses_list'); ?></a></li>
-        <li class="active"><?= $this->lang->line('expense'); ?></li>
+        <li class="active">ইনকাম</li>
       </ol>
     </section>
 
@@ -59,14 +51,14 @@
                 <div class="row">
                 <div class="col-md-5">
                   <div class="form-group">
-                      <label for="expense_date" class="col-sm-4 control-label"><?= $this->lang->line('expense_date'); ?> <label class="text-danger">*</label></label>
+                      <label for="expense_date" class="col-sm-4 control-label">ইনকামের তারিখ<label class="text-danger">*</label></label>
 
                   <div class="col-sm-8">
                     <div class="input-group date">
                       <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                       </div>
-                      <input type="text" class="form-control pull-right datepicker" value="<?php echo  $expense_date; ?>" id="expense_date" name="expense_date" readonly onkeyup="shift_cursor(event,'category_id')">
+                      <input type="text" class="form-control pull-right datepicker incomes_dates" value="<?php echo  date('d-m-Y'); ?>" id="expense_date" name="expense_date" readonly >
                       <span id="expense_date_msg" style="display:none" class="text-danger"></span>
                     </div>
                   </div>
@@ -75,9 +67,9 @@
                   
                   
                   <div class="form-group">
-                    <label for="expense_amt" class="col-sm-4 control-label"><?= $this->lang->line('amount'); ?> <label class="text-danger">*</label></label>
+                    <label for="expense_amt" class="col-sm-4 control-label">টাকার পরিমাণ <label class="text-danger">*</label></label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control only_currency" id="expense_amt" name="expense_amt" placeholder="" style="text-align: right; " value="<?php print $expense_amt; ?>" onkeyup="shift_cursor(event,'reference_no')" >
+                      <input type="text" class="form-control only_currency incomes_amounts " id="expense_amt" name="expense_amt" placeholder="" style="text-align: right; " value="" >
                       <span id="expense_amt_msg" style="display:none" class="text-danger"></span>
                     </div>
                   </div>
@@ -88,20 +80,16 @@
                <div class="col-md-5">
                   
                 <div class="form-group">
-                      <label for="expense_for" class="col-sm-4 control-label">খরচের কারণ *</label></label>
+                      <label for="expense_for" class="col-sm-4 control-label">ইনকামের কারণ *</label></label>
 
                   <div class="col-sm-8">
-                    <input type="text" class="form-control" id="expense_for" name="expense_for" placeholder="" onkeyup="shift_cursor(event,'expense_amt')" value="<?php print $expense_for; ?>" >
+                    <input type="text" class="form-control incomes_for" id="expense_for" name="expense_for" placeholder="" value="" >
                     <span id="expense_for_msg" style="display:none" class="text-danger"></span>
                   </div>
                 </div>
-                 
-                   
-                   
-                   
                 </div>
                   <!-- ########### -->
-</div>
+                </div>
               
 				
 				
@@ -113,7 +101,7 @@
                    <!-- <div class="col-sm-4"></div> -->
                                  
                    <div class="col-md-3 col-md-offset-3">
-                      <button type="button" id="save" class=" btn btn-block btn-success" title="Save Data">Save</button>
+                      <button type="button" id="save" class=" btn btn-block btn-success save_income_btn " title="Save Data">Save</button>
                    </div>
                    <div class="col-sm-3">
                     <a href="<?=base_url('dashboard');?>">
@@ -149,8 +137,12 @@
 <!-- TABLES CODE -->
 <?php include"comman/code_js_form.php"; ?>
 
-<script src="<?php echo $theme_link; ?>js/expense.js"></script>
+<script src="<?php echo $theme_link; ?>js/incomes.js"></script>
 <!-- Make sidebar menu hughlighter/selector -->
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
 </body>
 </html>
+
+
+
+

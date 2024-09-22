@@ -6,6 +6,7 @@ class Items extends MY_Controller {
 		parent::__construct();
 		$this->load_global();
 		$this->load->model('items_model','items');
+		$this->load->model('buy_model','buy');
 	}
 	
 	public function index()
@@ -23,15 +24,9 @@ class Items extends MY_Controller {
 		$this->load->view('items',$data);
 	}
 
-	public function newitems(){
+	public function newitems(){ 
 		$this->form_validation->set_rules('item_name', 'Item Name', 'trim|required');
-		$this->form_validation->set_rules('category_id', 'Category Name', 'trim|required');
 		$this->form_validation->set_rules('unit_id', 'Unit', 'trim|required');
-		$this->form_validation->set_rules('price', 'Item Price', 'trim|required');
-		$this->form_validation->set_rules('tax_id', 'Tax', 'trim|required');
-		$this->form_validation->set_rules('purchase_price', 'Purchase Price', 'trim|required');
-		//$this->form_validation->set_rules('profit_margin', 'Profit Margin', 'trim|required');
-		$this->form_validation->set_rules('sales_price', 'Sales Price', 'trim|required');
 
 		
 		if ($this->form_validation->run() == TRUE) {
@@ -74,6 +69,30 @@ class Items extends MY_Controller {
 		}
 		return $this->db->query('select brand_name from db_brands where id="'.$brand_id.'"')->row()->brand_name;
 	}
+	
+	public function get_item_by_id_ajax()
+	{
+		$id=$this->input->post('id');
+		$dt['items'] = $this->buy->get_this_product_info_by_id($id);
+		$unit_code_raw = $this->buy->get_all_units();
+		$select_option = array();
+		foreach ($unit_code_raw as $item_l) {
+			$selected = ($item_l->id==$dt['items']->unit_id)? 'selected' : '';
+			$select_option[] = "<option $selected value='".$item_l->id."'>".$item_l->unit_name."</option>";
+		}
+		$sopt = implode(' ', $select_option);
+		$dt['unit_code'] = '<select class="form-control select2 unit_id_select ">'.$sopt.'</select>';
+		$this->output->set_content_type('application/json')->set_output(json_encode($dt));
+	}
+
+	public function update_item_by_id()
+	{
+		$this->buy->update_item_by_id(array(
+			"item_name"	=> $this->input->post('item_name'),
+			"unit_id"	=> $this->input->post('unit_id'),
+		), $this->input->post('id'));
+	}
+
 	public function ajax_list()
 	{
 		$list = $this->items->get_datatables();
@@ -86,54 +105,17 @@ class Items extends MY_Controller {
 			$no++;
 			$row = array();
 			$row[] = '<input type="checkbox" name="checkbox[]" value='.$items->id.' class="checkbox column_checkbox" >';
-						
 
-			$row[] = (!empty($items->item_image) && file_exists($items->item_image)) ? "
-						<a title='Click for Bigger!' href='".base_url($items->item_image)."' data-toggle='lightbox'>
-						<image style='border:1px #72afd2 solid;' src='".base_url(return_item_image_thumb($items->item_image))."' width='75%' height='50%'> </a>" : "
-						<image style='border:1px #72afd2 solid;' src='".base_url()."theme/images/no_image.png' title='No Image!' width='75%' height='50%' >";
 			$row[] = $items->item_code;
-			$row[] = "<label class='text-blue'>".$items->item_name."</label><br><b>HSN</b>:".$items->hsn."<br><b>SKU</b>:".$items->sku;
-			$row[] = $items->brand_name;//$this->get_brand_name($items->brand_id);
-			$row[] = $items->category_name;
+			$row[] = "<label class='text-blue'>".$items->item_name."</label>";
 			$row[] = $items->unit_name;
-			$row[] = $items->stock;
-			$row[] = $items->alert_qty;
-			$row[] = app_number_format($items->purchase_price);
-			$row[] = app_number_format($items->final_price);
-			$row[] = ($tax_disabled)? '<p class="text-yellow text-bold">Disabled</p>' :$items->tax_name."<br>(".$items->tax_type.")";
-
-			 		if($items->status==1){ 
-			 			$str= "<span onclick='update_status(".$items->id.",0)' id='span_".$items->id."'  class='label label-success' style='cursor:pointer'>Active </span>";}
-					else{ 
-						$str = "<span onclick='update_status(".$items->id.",1)' id='span_".$items->id."'  class='label label-danger' style='cursor:pointer'> Inactive </span>";
-					}
-			$row[] = $str;		
 
 			 		$str2 = '<div class="btn-group" title="View Account">
-										<a class="btn btn-primary btn-o dropdown-toggle" data-toggle="dropdown" href="#">
-											Action <span class="caret"></span>
-										</a>
-										<ul role="menu" class="dropdown-menu dropdown-light pull-right">';
-
-											if($this->permissions('items_edit'))
-											$str2.='<li>
-												<a title="Edit Record ?" href="'.base_url('items/update/'.$items->id).'">
-													<i class="fa fa-fw fa-edit text-blue"></i>Edit
-												</a>
-											</li>';
-
-											if($this->permissions('items_delete'))
-											$str2.='<li>
-												<a style="cursor:pointer" title="Delete Record ?" onclick="delete_items('.$items->id.')">
-													<i class="fa fa-fw fa-trash text-red"></i>Delete
-												</a>
-											</li>
-											
-										</ul>
-									</div>';			
+								<a class="btn btn-primary btn-o edit_item_this " data-toggle="modal" data-target="#modal_item_edit" style="cursor:pointer" title="পন্য এডিট " item_ids="'.$items->id.'">
+									<i class="fa fa-fw fa-edit text-white"></i> Edit
+								</a>
+							</div>';
 			$row[] = $str2;
-
 			$data[] = $row;
 		}
 
@@ -173,7 +155,7 @@ class Items extends MY_Controller {
 		$display_json = array();
 		//if (!empty($_GET['name'])) {
 			$name = strtolower(trim($_GET['name']));
-			$sql =$this->db->query("SELECT id,item_name,item_code,stock FROM db_items where  status=1 and  (LOWER(item_name) LIKE '%$name%' or LOWER(item_code) LIKE '%$name%' or LOWER(custom_barcode) LIKE '%$name%')   limit 10");
+			$sql =$this->db->query("SELECT id,item_name,item_code,stock FROM db_items where  status=1 and  (LOWER(item_name) LIKE '%$name%' or LOWER(item_code) LIKE '%$name%' or LOWER(custom_barcode) LIKE '%$name%') limit 10");
 			
 			foreach ($sql->result() as $res) {
 			      $json_arr["id"] = $res->id;

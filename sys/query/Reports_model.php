@@ -3,35 +3,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reports_model extends CI_Model {
 
-	public function show_sales_report(){
+	public function show_sales_report(){ 
 		extract($_POST);
 
 		$from_date=date("Y-m-d",strtotime($from_date));
 		$to_date=date("Y-m-d",strtotime($to_date));
 		
-		$this->db->select("a.id,a.sales_code,a.sales_date,b.customer_name,b.customer_code,a.grand_total,a.paid_amount");
+		$this->db->select("a.id,a.sales_code,a.sales_date,b.customer_name,b.customer_code,a.grand_total,a.paid_amount,a.total_sell_price_s,a.sell_payment_due");
 	    
 		if($customer_id!=''){
 			
 			$this->db->where("a.customer_id=$customer_id");
 		}
-		if($view_all=="no"){
-			$this->db->where("(a.sales_date>='$from_date' and a.sales_date<='$to_date')");
-		}
+		
+		$this->db->where("(a.sales_date>='$from_date' and a.sales_date<='$to_date')");
 		$this->db->where("b.`id`= a.`customer_id`");
 		$this->db->from("db_sales as a");
-		$this->db->where("a.`sales_status`= 'Final'");
+		// $this->db->where("a.`sales_status`= 'Final'");
 		$this->db->from("db_customers as b");
 		
-		if($payment_status=='Paid'){
-			$this->db->where("a.grand_total=a.paid_amount");
-		}
-		else if($payment_status=='Unpaid'){
-			$this->db->where("a.paid_amount=0");
-		}
-		else if($payment_status=='Partial'){
-			$this->db->where("(a.grand_total!=a.paid_amount and a.paid_amount>0)");
-		}
+		// if($payment_status=='Paid'){
+		// 	$this->db->where("a.grand_total=a.paid_amount");
+		// }
+		// else if($payment_status=='Unpaid'){
+		// 	$this->db->where("a.paid_amount=0");
+		// }
+		// else if($payment_status=='Partial'){
+		// 	$this->db->where("(a.grand_total!=a.paid_amount and a.paid_amount>0)");
+		// }
 		
 		//echo $this->db->get_compiled_select();exit();
 		
@@ -43,31 +42,24 @@ class Reports_model extends CI_Model {
 			$tot_due_amount=0;
 			foreach ($q1->result() as $res1) {
 				
-				$date_difference = ($res1->paid_amount==0 || ($res1->grand_total!=$res1->paid_amount && $res1->paid_amount>0) ) ? date_difference($res1->sales_date,date("Y-m-d")) : 0;
-
 				echo "<tr>";
 				echo "<td>".++$i."</td>";
 				echo "<td><a title='View Invoice' href='".base_url("sales/invoice/$res1->id")."'>".$res1->sales_code."</a></td>";
 				echo "<td>".show_date($res1->sales_date)."</td>";
 				echo "<td>".$res1->customer_code."</td>";
 				echo "<td>".$res1->customer_name."</td>";
-				echo "<td class='text-right'>".app_number_format($res1->grand_total)."</td>";
-				echo "<td class='text-right'>".app_number_format($res1->paid_amount)."</td>";
-				echo "<td class='text-right'>".app_number_format($res1->grand_total-$res1->paid_amount)."</td>";
-				echo "<td class='text-left'>$date_difference</td>";
+				echo "<td class='text-right'>".app_number_format($res1->total_sell_price_s)."</td>";
+				echo "<td class='text-right'>".app_number_format($res1->sell_payment_due)."</td>";
 				echo "</tr>";
-				$tot_grand_total+=$res1->grand_total;
-				$tot_paid_amount+=$res1->paid_amount;
-				$tot_due_amount+=($res1->grand_total-$res1->paid_amount);
+				$tot_grand_total+=$res1->total_sell_price_s;
+				$tot_due_amount+=($res1->sell_payment_due);
 
 			}
 
 			echo "<tr>
 					  <td class='text-right text-bold' colspan='5'><b>Total :</b></td>
 					  <td class='text-right text-bold'>".app_number_format($tot_grand_total)."</td>
-					  <td class='text-right text-bold'>".app_number_format($tot_paid_amount)."</td>
 					  <td class='text-right text-bold'>".app_number_format($tot_due_amount)."</td>
-					  <td></td>
 				  </tr>";
 		}
 		else{
@@ -149,7 +141,7 @@ class Reports_model extends CI_Model {
 		$from_date=date("Y-m-d",strtotime($from_date));
 		$to_date=date("Y-m-d",strtotime($to_date));
 		
-		$this->db->select("a.id,a.purchase_code,a.purchase_date,b.supplier_name,b.supplier_code,a.grand_total,a.paid_amount");
+		$this->db->select("a.id,a.purchase_code,a.purchase_date,b.supplier_name,b.supplier_code,a.grand_total,a.paid_amount,c.total_due_payments");
 	    
 		if($supplier_id!=''){
 			$this->db->where("a.supplier_id=$supplier_id");
@@ -161,6 +153,9 @@ class Reports_model extends CI_Model {
 		$this->db->from("db_purchase as a");
 		$this->db->where("a.`purchase_status`= 'Received'");
 		$this->db->from("db_suppliers as b");
+
+		$this->db->join('db_purchaseitems c', 'a.id = c.purchase_id', 'left');
+		
 		
 		if($payment_status=='Paid'){
 			$this->db->where("a.grand_total=a.paid_amount");
@@ -187,21 +182,18 @@ class Reports_model extends CI_Model {
 				echo "<td>".++$i."</td>";
 				echo "<td><a title='View Invoice' href='".base_url("purchase/invoice/$res1->id")."'>".$res1->purchase_code."</a></td>";
 				echo "<td>".show_date($res1->purchase_date)."</td>";
-				echo "<td>".$res1->supplier_code."</td>";
 				echo "<td>".$res1->supplier_name."</td>";
 				echo "<td class='text-right'>".app_number_format($res1->grand_total)."</td>";
-				echo "<td class='text-right'>".app_number_format($res1->paid_amount)."</td>";
-				echo "<td class='text-right'>".app_number_format($res1->grand_total-$res1->paid_amount)."</td>";
-				echo "<td class='text-left'>$date_difference</td>";
+				echo "<td class='text-right'>".app_number_format($res1->grand_total - $res1->total_due_payments)."</td>";
+				echo "<td class='text-right'>".app_number_format($res1->total_due_payments)."</td>";
 				echo "</tr>";
 				$tot_grand_total+=$res1->grand_total;
-				$tot_paid_amount+=$res1->paid_amount;
-				$tot_due_amount+=($res1->grand_total-$res1->paid_amount);
-
+				$tot_paid_amount+=$res1->grand_total - $res1->total_due_payments;
+				$tot_due_amount+=($res1->total_due_payments); 
 			}
 
 			echo "<tr>
-					  <td class='text-right text-bold' colspan='5'><b>Total :</b></td>
+					  <td class='text-right text-bold' colspan='4'><b>Total :</b></td>
 					  <td class='text-right text-bold'>".app_number_format($tot_grand_total)."</td>
 					  <td class='text-right text-bold'>".app_number_format($tot_paid_amount)."</td>
 					  <td class='text-right text-bold'>".app_number_format($tot_due_amount)."</td>
@@ -348,7 +340,6 @@ class Reports_model extends CI_Model {
 							a.stock,
 							");
 		$this->db->from("db_items as a");
-		$this->db->join("db_tax as b","b.id=a.tax_id","left");
 		$this->db->join("db_brands as c","c.id=a.brand_id","left");
 		$this->db->join("db_category as d","d.id=a.category_id","left");
 

@@ -108,7 +108,7 @@ padding-right: 2px;
                                  <label for="customer_id" class="col-sm-2 control-label"><?= $this->lang->line('customer_name'); ?><label class="text-danger">*</label></label>
                                  <div class="col-sm-3">
                                     <div class="input-group">
-                                       <select class="form-control select2" id="customer_id" name="customer_id"  style="width: 100%;" onkeyup="shift_cursor(event,'mobile')">
+                                       <select class="form-control select2" id="customer_id" name="customer_id" style="width: 100%;" onkeyup="shift_cursor(event,'mobile')">
                                        </select>
                                        <span class="input-group-addon pointer" data-toggle="modal" data-target="#customer-modal" title="New Customer?"><i class="fa fa-user-plus text-primary fa-lg"></i></span>
                                     </div>
@@ -872,7 +872,7 @@ padding-right: 2px;
       var item_discount_input = parseFloat($("#item_discount_input_"+row_id).val());
           item_discount_input = (isNaN(item_discount_input)) ? 0 :item_discount_input;
 
-      //Calculate discount      
+      //Calculate discount       
       var discount_amt=(item_discount_type=='Percentage') ? ((sales_price) * item_discount_input)/100 : (item_discount_input * qty);
       
       sales_price-=parseFloat(discount_amt);

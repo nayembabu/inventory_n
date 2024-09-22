@@ -72,8 +72,8 @@
                       <th colspan="5" style="text-align:right">Total</th>
                       <th></th>
                       <th></th>
-                      <th></th><!-- 7 -->
-                      <th></th><!-- 7 -->
+                      <th></th>
+                      <th></th>
                   </tr>
               </tfoot>
                

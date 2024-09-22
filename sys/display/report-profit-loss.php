@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- TABLES CSS CODE -->
-<?php include"comman/code_css_form.php"; ?>
-<!-- </copy> -->  
-
+   <base href="<?php echo base_url(); ?>" target="">
+   <!-- TABLES CSS CODE -->
+   <?php include"comman/code_css_form.php"; ?>
+   <!-- </copy> -->  
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -28,368 +28,55 @@
     </section>
 
     <section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="box box-primary">
-            <div class="box-body table-responsive no-padding">
-           <div class="form-group col-md-4">
-             <label for="to_date">Select Date</label>
-             
-                <div class="input-group">
-                   <button type="button" class="btn btn-default pull-right " id="pl-daterange-btn" name="pl-daterange-btn">
-                   <span>
-                   <i class="fa fa-calendar"></i> Select Date Range
-                   </span>
-                   <i class="fa fa-caret-down"></i>
-                   </button>
-                </div>
-             
-             <span id="sku_msg" style="display:none" class="text-danger"></span>
-          </div>
+      <div class="row" >
 
-            <!-- Inside -->
-          </div>
-          </div>
-        </div>
-        <!-- left column -->
-        <div class="col-md-6">
-                     <div class="box box-primary">
-                        <div class="box-header">
-                           <?php $this->load->view('components/export_btn',array('tableId' => 'report-data'));?>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body table-responsive no-padding">
-                           <table class="table table-bordered table-hover " id="report-data" >
-                              <!-- Total Opening Stock -->
-                              <tr>
-                                 <td><?= $this->lang->line('opening_stock'); ?></td>
-                                 <td class="text-right text-bold opening_stock_price"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <tr>
-                                 <td colspan="2" class="text-bold font-italic text-primary"><?= $this->lang->line('purchase'); ?></td>
-                              </tr>
-                              <!-- Total Purchase -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_purchase'); ?></td>
-                                 <td class="text-right text-bold pur_total"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase Tax -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_purchase_tax'); ?></td>
-                                 <td class="text-right text-bold purchase_tax_amt"><?php echo $CI->currency(number_format((0),2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase Other Charges -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_other_charges_of_purchase'); ?></td>
-                                 <td class="text-right text-bold pur_other_charges_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase Doscount -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_discount_on_purchase'); ?></td>
-                                 <td class="text-right text-bold purchase_discount_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase Paid Amount -->
-                              <tr>
-                                 <td><?= $this->lang->line('paid_amount'); ?></td>
-                                 <td class="text-right text-bold text-success purchase_paid_amount"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase Due -->
-                              <tr>
-                                 <td><?= $this->lang->line('purchase_due'); ?></td>
-                                 <td class="text-right text-bold text-danger purchase_due_total"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <tr>
-                                 <td colspan="2" class="text-bold font-italic text-primary"><?= $this->lang->line('purchase_return'); ?></td>
-                              </tr>
-                              <!-- Total Purchase Return -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_purchase_return'); ?></td>
-                                 <td class="text-right text-bold pur_return_total"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase return Tax -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_purchase_return_tax'); ?></td>
-                                 <td class="text-right text-bold purchase_return_tax_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase return Other Charges -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_other_charges_of_purchase_return'); ?></td>
-                                 <td class="text-right text-bold pur_return_other_charges_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase return Doscount -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_discount_on_purchase_return'); ?></td>
-                                 <td class="text-right text-bold purchase_return_discount_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase Return Paid Amount -->
-                              <tr>
-                                 <td><?= $this->lang->line('paid_amount'); ?></td>
-                                 <td class="text-right text-bold text-success purchase_return_paid_amount"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Purchase returns Due -->
-                              <tr>
-                                 <td><?= $this->lang->line('purchase_return_due'); ?></td>
-                                 <td class="text-right text-bold text-danger purchase_return_due_total"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                           </table>
-                        </div>
-                        <!-- /.box-body -->
-                     </div>
-                     <!-- /.box -->
-                  </div>
-                  <div class="col-md-6">
-                     <div class="box">
-                        <div class="box-header">
-                           <?php $this->load->view('components/export_btn',array('tableId' => 'report-data-4'));?>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body table-responsive no-padding">
-                           <table class="table table-bordered table-hover " id="report-data-4" >
-                              <!-- Total Expenses -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_expense'); ?></td>
-                                 <td class="text-right text-bold exp_total"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <tr>
-                                 <td colspan="2" class="text-bold font-italic text-primary"><?= $this->lang->line('sales'); ?></td>
-                              </tr>
-                              <!-- Total Sales -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_sales'); ?></td>
-                                 <td class="text-right text-bold sal_total"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Sales Tax -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_sales_tax'); ?></td>
-                                 <td class="text-right text-bold sales_tax_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Sales Other Charges -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_other_charges_of_sales'); ?></td>
-                                 <td class="text-right text-bold sal_other_charges_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Sales Doscount -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_discount_on_sales'); ?></td>
-                                 <td class="text-right text-bold sales_discount_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Sales Paid Amount -->
-                              <tr>
-                                 <td><?= $this->lang->line('paid_amount'); ?></td>
-                                 <td class="text-right text-bold text-success sales_paid_amount"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Sales Due -->
-                              <tr>
-                                 <td><?= $this->lang->line('sales_due'); ?></td>
-                                 <td class="text-right text-bold text-danger sales_due_total"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <tr>
-                                 <td colspan="2" class="text-bold font-italic text-primary"><?= $this->lang->line('sales_return'); ?></td>
-                              </tr>
-                              <!-- Total sales Return -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_sales_return'); ?></td>
-                                 <td class="text-right text-bold sal_return_total"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total sales return Tax -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_sales_return_tax'); ?></td>
-                                 <td class="text-right text-bold sales_return_tax_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Sales return Other Charges -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_other_charges_of_sales_return'); ?></td>
-                                 <td class="text-right text-bold sal_return_other_charges_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Sales return Doscount -->
-                              <tr>
-                                 <td><?= $this->lang->line('total_discount_on_sales_return'); ?></td>
-                                 <td class="text-right text-bold sales_return_discount_amt"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Sales return Paid Amount -->
-                              <tr>
-                                 <td><?= $this->lang->line('paid_amount'); ?></td>
-                                 <td class="text-right text-bold text-success sales_return_paid_amount"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Sales Return Due -->
-                              <tr>
-                                 <td><?= $this->lang->line('sales_return_due'); ?></td>
-                                 <td class="text-right text-bold text-danger sales_return_due_total"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                           </table>
-                        </div>
-                        <!-- /.box-body -->
-                     </div>
-                     <!-- /.box -->
-                  </div>
-                  <!-- right column -->
-                  <div class="col-md-6">
-                     <div class="box">
-                        <div class="box-header">
-                           <?php $this->load->view('components/export_btn',array('tableId' => 'report-data-2'));?>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body table-responsive no-padding">
-                           <table class="table table-bordered table-hover " id="report-data-2" >
-                              <!-- Total Gross Profit -->
-                              <tr>
-                                 <td><?= $this->lang->line('gross_profit'); ?></td>
-                                 <td class="text-right text-bold gross_profit"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                              <!-- Total Net Profit -->
-                              <tr>
-                                 <td><?= $this->lang->line('net_profit'); ?></td>
-                                 <td class="text-right text-bold tot_net_profit"><?php echo $CI->currency(number_format(0,2,'.','')); ?></td>
-                              </tr>
-                           </table>
-                        </div>
-                        <!-- /.box-body -->
-                     </div>
-                     <!-- /.box -->
-                  </div>
-       
-      </div>
-      <div class="row">
-        <!-- left column -->
-        <div class="col-md-12">
-          <div class="box">
-            <div class="box-header">
-        <?= form_open('#', array('class' => 'form-horizontal', 'id' => 'profit-loss-report', 'enctype'=>'multipart/form-data', 'method'=>'POST'));?>
-                           <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">      
-        <div class="form-group">
-                <label for="to_date" class="col-sm-2 control-label">Select Date</label>
-                <div class="col-sm-3">
-                <div class="input-group">
-                  <button type="button" class="btn btn-default pull-right daterange-btn" name="pl2-daterange-btn" id="pl2-daterange-btn">
-                    <span>
-                      <i class="fa fa-calendar"></i> Select Date Range
-                    </span>
-                    <i class="fa fa-caret-down"></i>
-                  </button>
-                </div>
-              </div>
-           
-        <!-- Your Code -->
-                </div> 
-          <?= form_close(); ?>
-
-             
-
-            <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-                  
-                  <div class="col-md-12">
-                     <!-- Custom Tabs -->
-                     <div class="nav-tabs-custom">
-                        
-                        <ul class="nav nav-tabs">
-                           <li class="active"><a href="#tab_1" data-toggle="tab"><?= $this->lang->line('item_wise_profit'); ?></a></li>
-                           <li><a href="#tab_2" data-toggle="tab"><?= $this->lang->line('invoice_wise_profit'); ?></a></li>
-                        </ul>
-                        <div class="tab-content">
-                           <div class="tab-pane active" id="tab_1">
-                              <div class="row">
-                                 <!-- right column -->
-                                 <div class="col-md-12">
-                                    <!-- form start -->
-                                       <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
-                                       <?php $this->load->view('components/export_btn',array('tableId' => 'profit_by_item_table'));?>
-                                          <br><br>
-                                          <div class="table-responsive">
-                                          <table class="table table-bordered table-hover " id="profit_by_item_table" >
-                                              <thead>
-                                              <tr class='bg-blue'>
-                                                <th style="">#</th>
-                                                <th style=""><?= $this->lang->line('item_name'); ?></th>
-                                                <th style=""><?= $this->lang->line('sales_quantity'); ?></th>
-                                                <th style=""><?= $this->lang->line('sales_price'); ?></th>
-                                                <th style=""><?= $this->lang->line('purchase_price'); ?></th>
-                                                <th style=""><?= $this->lang->line('gross_profit'); ?></th>
-                                                <!-- <th style=""><?= $this->lang->line('purchase_return_quantity'); ?></th>
-                                                <th style=""><?= $this->lang->line('purchase_return_price'); ?>(+)</th>
-                                                <th style=""><?= $this->lang->line('sales_return_quantity'); ?></th>
-                                                <th style=""><?= $this->lang->line('sales_return_price'); ?>(-)</th> -->
-                                                <!-- <th style=""><?= $this->lang->line('net_profit'); ?></th> -->
-                                              </tr>
-                                              </thead>
-                                              <tbody id="tbodyid">
-                                              
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                       <!-- /.box-body -->
-                                 </div>
-                                 <!--/.col (right) -->
-                              </div>
-                              <!-- /.row -->
+         <div class="col-md-12">
+            <div class="box box-primary">
+               <div class="box-body table-responsive no-padding">
+                  <div class="form-group col-md-4">
+                     <label for="to_date">শুরু তারিখ</label>                  
+                     <div class="col-sm-12">
+                        <div class="input-group date">
+                           <div class="input-group-addon">
+                              <i class="fa fa-calendar"></i>
                            </div>
-                           <!-- /.tab-pane -->
-                          
-                           <div class="tab-pane" id="tab_2">
-                              <div class="row">
-                                 <div class="col-md-12">
-                                       
-                                         <div class="alert alert-info text-left">
-                                            <p>
-                                             <strong>Note:</strong>
-                                             Item Wise & Invoice wise Reports total Gross Profit may worries,
-                                             Invoice wise Report deducts Discount on Invoice.
-                                           </p>
-                                         </div>
-                                       </div>
-                                 </div>
-
-                              <div class="row">
-                                 <!-- right column -->
-                                 <div class="col-md-12">
-                                    <!-- form start -->
-                                       <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
-                                          <?php $this->load->view('components/export_btn',array('tableId' => 'profit_by_invoice_table'));?>
-
-                                          <br><br>
-                                          <div class="table-responsive">
-                                          <table class="table table-bordered table-hover " id="profit_by_invoice_table" >
-                                              <thead>
-                                              <tr class='bg-blue'>
-                                                <th style="">#</th>
-                                                <th style=""><?= $this->lang->line('invoice_no'); ?></th>
-                                                <th style=""><?= $this->lang->line('sales_date'); ?></th>
-                                                <th style=""><?= $this->lang->line('customer_name'); ?></th>
-                                                <th style=""><?= $this->lang->line('sales_price'); ?></th>
-                                                <th style=""><?= $this->lang->line('purchase_price'); ?></th>
-                                                <th style=""><?= $this->lang->line('invoice_discount'); ?></th>
-                                                <th style=""><?= $this->lang->line('gross_profit'); ?></th>
-                                                
-                                              </tr>
-                                              </thead>
-                                              <tbody id="tbodyid">
-                                              
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                       <!-- /.box-body -->
-                                 </div>
-                                 <!--/.col (right) -->
-                              </div>
-                              <!-- /.row -->
-                           </div>
-                           <!-- /.tab-pane -->
-                      
+                           <input type="text" class="form-control pull-right datepicker  star_date_select "  id="pur_date" name="pur_date" readonly onkeyup="shift_cursor(event,'purchase_status')" value="<?= date('d-m-Y');?>">
                         </div>
-                        <!-- /.tab-content -->
+                        <span id="pur_date_msg" style="display:none" class="text-danger"></span>
                      </div>
-                     <!-- nav-tabs-custom -->
                   </div>
-                  <!-- /.col -->
-              
+                  <div class="form-group col-md-4">
+                     <label for="to_date">শেষ তারিখ</label>                  
+                     <div class="col-sm-12">
+                        <div class="input-group date">
+                           <div class="input-group-addon">
+                              <i class="fa fa-calendar"></i>
+                           </div>
+                           <input type="text" class="form-control pull-right datepicker  end_select_date "  id="pur_date" name="pur_date" readonly onkeyup="shift_cursor(event,'purchase_status')" value="<?= date('d-m-Y');?>">
+                        </div>
+                        <span id="pur_date_msg" style="display:none" class="text-danger"></span>
+                     </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                     <label for="to_date">সার্চ করুন</label>                  
+                     <div class="col-sm-12">
+                        <div class="input-group ">
+                           <div class="btn btn-success income_expense_report_btns ">সার্চ করুন</div>
+                        </div>
+                        <span id="pur_date_msg" style="display:none" class="text-danger"></span>
+                     </div>
+                  </div>
+               </div>
             </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-      
-      </div>
+         </div>
 
+
+         <div class="assign_ie_data">
+            
+         </div>
+        
+      </div>
+      
     </section>
   
   </div>
@@ -413,81 +100,100 @@
 
 <script>
 
+   $(document).on('click', '.income_expense_report_btns', function () {
 
-function get_reports(report_type,table_name){
-  $(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
-  var base_url=$("#base_url").val();
-  return $.post(base_url+'reports/'+report_type, {from_date: get_start_date('pl2-daterange-btn'), to_date: get_end_date('pl2-daterange-btn')}, function(result) {
-    //console.log(result);
-    $("#"+table_name+" tbody").html(result);
-    $(".overlay").remove();
-  });
-}
-function get_all_reports(){
-  get_reports('get_profit_by_item','profit_by_item_table');
-  get_reports('get_profit_by_invoice','profit_by_invoice_table');
-}
-jQuery(document).ready(function($) {
-  get_pl_values();
-   get_all_reports();
-});
+      $.ajax({
+         type: "post",
+         url: "reports/get_income_expense_dat_to_date",
+         data: {
+            startDate:  $('.star_date_select').val(),
+            endDate:    $('.end_select_date').val(),
+         },
+         success: function (r) {
+            // Sum the price property of each object using reduce()
+         let getpayTotalPayment = r.getpay.reduce((accumulator, current) => accumulator + parseFloat(current.payment), 0);
+         let incomeTotal = r.income.reduce((accumulator, current) => accumulator + parseFloat(current.income_amount), 0);
+         let expenseTotal = r.expense.reduce((accumulator, current) => accumulator + parseFloat(current.expense_amt), 0);
+         let costpayTotalPay = r.costpay.reduce((accumulator, current) => accumulator + parseFloat(current.payment), 0);
+            
+            let income_list_data = '';
+            let expense_list_datas = '';
 
-function get_pl_values(){
-  var base_url=$("#base_url").val();
-  $.post(base_url+"reports/get_profit_loss_report",{from_date: get_start_date('pl-daterange-btn'), to_date: get_end_date('pl-daterange-btn')},function(result){
-      var data = jQuery.parseJSON(result);
-      $.each(data, function(index, element) {
-              $("."+index).html(element);
+            for (let n = 0; n < r.income.length; n++) { 
+               income_list_data += 
+                                 `<tr>
+                                    <td>${r.income[n].income_for}</td>
+                                    <td class="text-right text-bold ">${r.income[n].income_amount}</td>
+                                 </tr>`;
+            }
+
+            for (let n = 0; n < r.expense.length; n++) { 
+               expense_list_datas += 
+                                 `<tr>
+                                    <td>${r.expense[n].expense_for}</td>
+                                    <td class="text-right text-bold ">${r.expense[n].expense_amt}</td>
+                                 </tr>`;
+            }
+
+
+            $('.assign_ie_data').html(
+                     `<div class="col-md-6">
+                        <div class="box box-primary">
+                           <div class="box-header" style="font-size: 22px;">
+                              <center><b>জমার হিসাব</b></center>
+                           </div>
+                           <!-- /.box-header -->
+                           <div class="box-body table-responsive no-padding">
+                              <table class="table table-bordered table-hover " id="report-data" >
+
+                                 <tr>
+                                    <th>মোট ইনকাম</th>
+                                    <th class="text-right text-bold ">${incomeTotal}</th>
+                                 </tr>
+
+                              </table>
+                              <div style="font-size: 16px; margin: 5px; "><center><b>বিস্তারিত</b></center></div>
+                              <table class="table table-bordered table-hover " id="report-data" style="" >
+                                 ${income_list_data}
+                              </table>
+                           </div>
+                           <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                     </div>
+                     <div class="col-md-6">
+                        <div class="box box-primary">
+                           <div class="box-header" style="font-size: 22px;">
+                              <center><b>খরচের হিসাব</b></center>
+                           </div>
+                           <!-- /.box-header -->
+                           <div class="box-body table-responsive no-padding">
+                              <table class="table table-bordered table-hover " id="report-data-4" >
+
+                                 <tr>
+                                    <th>মোট খরচ</th>
+                                    <th class="text-right text-bold ">${expenseTotal}</th>
+                                 </tr>
+
+                              </table>
+                              
+                              <div style="font-size: 16px; margin: 5px; "><center><b>বিস্তারিত</b></center></div>
+                              <table class="table table-bordered table-hover " id="report-data" style="" >
+                                 ${expense_list_datas}
+                              </table>
+
+                           </div>
+                           <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                     </div>`
+                  );
+         }
       });
-  });
-}
 
-/*Date Range picker event 1*/
-$('#pl-daterange-btn').on('apply.daterangepicker', function(ev, picker) {
-    console.log("pl-daterange-btn");
-  get_pl_values();
-});
-/*end*/
-/*Date Range picker event 2*/
-$('#pl2-daterange-btn').on('apply.daterangepicker', function(ev, picker) {
-    console.log("pl2-daterange-btn");
-  get_all_reports();
-});
-/*end*/
-
-$(function() {
-    var start = moment().subtract(29, 'days');
-    var end = moment();
-    function cb(start, end) {
-        $('.daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        $('#pl-daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-    }
-    cb(start, end);
-
-});
+   });
 
 
-
-//Date picker 1
-    $('#pl-daterange-btn').daterangepicker(
-      {
-        ranges   : {
-          'Today'       : [moment(), moment()],
-          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        startDate: moment().subtract(29, 'days'),
-        endDate  : moment()
-      },
-      function (start, end) {
-        
-        $('#pl-daterange-btn span').html(start.format('<?php echo strtoupper($VIEW_DATE) ;?>') + ' - ' + end.format('<?php echo strtoupper($VIEW_DATE);?>'))
-      }
-    );
-//End
 
 </script>
 

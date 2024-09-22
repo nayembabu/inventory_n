@@ -63,27 +63,13 @@
                   <th><?= $this->lang->line('customer_id'); ?></th>
                   <th><?= $this->lang->line('customer_name'); ?></th>
                   <th><?= $this->lang->line('mobile'); ?></th>
-                  <th><?= $this->lang->line('email'); ?></th>
-                  <th><?= $this->lang->line('total_paid'); ?>(-)</th>
-                  <th><?= $this->lang->line('sales_due'); ?>(-)</th>
-                  <th><?= $this->lang->line('sales_return_due'); ?>(+)</th>
-                  <th><?= $this->lang->line('status'); ?></th>
-                  <th><?= $this->lang->line('action'); ?></th> 
+                  <th>অপশন</th> 
                 </tr>
                 </thead>
                 <tbody>
 				
                 </tbody>
-               <tfoot>
-                  <tr class="bg-gray">
-                      <th colspan="5" style="text-align:right">Total</th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th><!-- 7 -->
-                      <th></th><!-- 8 -->
-                  </tr>
-              </tfoot>
+
               </table>
             </div>
             <!-- /.box-body -->
@@ -115,8 +101,8 @@
   //Date picker
     $('.datepicker').datepicker({
       autoclose: true,
-    format: 'dd-mm-yyyy',
-     todayHighlight: true
+      format: 'dd-mm-yyyy',
+      todayHighlight: true
     });
 </script>
 
@@ -137,11 +123,11 @@ $(document).ready(function() {
                     multi_delete();
                 }
             },
-            { extend: 'copy', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8]} },
-            { extend: 'excel', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8]} },
-            { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8]} },
-            { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8]} },
-            { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8]} },
+            { extend: 'copy', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
+            { extend: 'excel', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
+            { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
+            { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
+            { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
             { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },  
 
             ]
@@ -157,7 +143,7 @@ $(document).ready(function() {
         },
         // Load data for the table's content from an Ajax source
         "ajax": {
-            "url": "<?php echo site_url('customers/ajax_list')?>",
+            "url": "customers/ajax_list",
             "type": "POST",
             
             complete: function (data) {
@@ -176,7 +162,7 @@ $(document).ready(function() {
         //Set column definition initialisation properties.
         "columnDefs": [
         { 
-            "targets": [ 0,9 ], //first column / numbering column
+            "targets": [ 0,4 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
         {
@@ -195,28 +181,6 @@ $(document).ready(function() {
                     typeof i === 'number' ?
                         i : 0;
             };
-            var invoice_total = api
-                .column( 5, { page: 'none'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-            var sales_due = api
-                .column( 6, { page: 'none'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-            var sales_return_due = api
-                .column( 7, { page: 'none'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-            //$( api.column( 0 ).footer() ).html('Total');
-            $( api.column( 5 ).footer() ).html(app_number_format(invoice_total));
-            $( api.column( 6 ).footer() ).html(app_number_format(sales_due));
-            $( api.column( 7 ).footer() ).html(app_number_format(sales_return_due));
         },
         /*End Footer Total*/
     });
